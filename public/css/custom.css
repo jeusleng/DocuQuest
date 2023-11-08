@@ -1,0 +1,451 @@
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --primary-color: #c53f3f;     /* Your primary color */
+    --secondary-color: rgb(82, 82, 82);   /* Your secondary color */
+}
+
+h1{
+    color: var(--primary-color);
+    font-weight: bolder;
+}
+
+h2{
+    color: var(--secondary-color);
+    font-weight: normal;
+}
+
+h4{
+    color: var(--secondary-color);
+    line-height: 1.8;
+    font-weight: normal;
+}
+
+.or{
+    color: var(--secondary-color);
+    padding: 20px;
+}
+
+
+.col-md-6 .img-fluid{
+    margin-top: -140px;
+}
+/* Common Button Styles */
+.common-button {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 40px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+}
+
+/* Primary Button */
+.primary-button {
+    background-color: #c53f3f;
+    border: 2px solid #c53f3f;
+    color: white;
+}
+
+.primary-button:hover {
+    background-color: transparent;
+    border: 2px solid #c53f3f;
+    color: #c53f3f;
+    text-decoration: none;
+}
+
+/* Secondary Button */
+.secondary-button {
+    background-color: transparent;
+    border: 2px solid #c53f3f;
+    color: #c53f3f;
+}
+
+.secondary-button:hover {
+    background-color: #c53f3f; /* Background color like the primary button */
+    text-decoration: none;
+    color: white;
+}
+
+.nav-item{
+    padding: 10px;
+}
+
+.nav-link{
+    color: var(--primary-color) !important;
+}
+
+/* Active Menu Item */
+.nav-item .active {
+    border-bottom: 2px solid #c53f3f !important;
+    color: #c53f3f;
+}
+
+/* Hover Effect (Underline for All Menu Items) */
+.nav-item .nav-link {
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s; /* Initial transition for all menu items */
+}
+
+.nav-item:hover .nav-link {
+    border-bottom: 2px solid #c53f3f; /* Transition on hover */
+}
+
+.text-center{
+    color: var(--primary-color);
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.request-process-section {
+    margin-top: 15px;
+    padding: 20px 0;
+}
+
+.signup-card{
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px;
+}
+
+.history-card{
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px;
+    width: 105%;
+}
+
+.request-card {
+    width: 210px;
+    height: 360px;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.request-card img {
+    display: block;
+    margin: 0 auto;
+    width: 140px; /* Adjust the width as needed */
+    height: auto;
+}
+
+
+.request-card h4 {
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--primary-color);
+    margin: 10px 0;
+    line-height: 1.3;
+}
+
+.request-card p {
+    color: #555;
+    font-size: 12px;
+    margin: 0;
+    text-align:justify;
+}
+
+.request-card:hover {
+    box-shadow: 0 0 90px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+    border-color: var(--primary-color);
+    transition: border-color 0.3s;
+}
+
+.footer {
+    background-color: #f5f5f5; /* Use the desired background color */
+    padding: 20px 0;
+    color: #555; /* Use your preferred text color */
+    font-family: 'Poppins', sans-serif; /* Use your preferred font */
+}
+
+.social-icon {
+    font-size: 24px;
+    margin: 0 10px;
+    color: #c53f3f; /* Use the desired social media icon color */
+}
+
+.social-icon:hover {
+    color: #db6161;
+    transition: color 0.3s;
+}
+
+.login-container {
+    margin-bottom: 30px;
+}
+
+.login-card {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-image {
+    width: 100%; /* Adjust the width as needed */
+    height: auto;
+}
+
+.login-title {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 20px 0;
+    font-size: 40px;
+    text-align: center;
+}
+
+.signup-title {
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 20px 0;
+    font-size: 40px;
+    text-align: center;
+}
+
+.request-title{
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    font-size: 40px;
+    text-align: center;
+}
+
+.form-group-success{
+    margin-bottom: -100px;
+}
+
+.login-form .form-group label {
+    font-weight: normal;
+    text-align: left; 
+    display: block;   
+    color: var(--secondary-color);
+}
+
+/* Reduce the font size of the placeholder text */
+.form-control::placeholder {
+    font-size: 12px; /* Adjust the font size as needed */
+    color: #c6c6c6;
+}
+
+.signup-text {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+.signup-text a{
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.signup-text a:hover{
+    color: var(--primary-color);
+    border-bottom: 2px solid #c53f3f;
+}
+
+.btn-primary {
+    background-color: #c53f3f; /* Primary button color */
+    border: 2px solid #c53f3f;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    border: 2px solid #c53f3f;
+    color: #c53f3f;
+    text-decoration: none;
+}
+
+.category-label{
+    color:var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 10px; 
+}
+
+.signup-card .label{
+    color:var(--secondary-color);
+}
+
+/* Add spacing between category labels and form groups */
+.category-label {
+    margin-top: 20px;
+}
+
+
+/* Style the label */
+.form-group label {
+    font-size: 16px;
+    color: var(--secondary-color); /* Red color for labels */
+}
+
+.alert-info{
+    font-size: 12px;
+    opacity: 60%;
+    text-align: left;
+}
+
+.success-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure the card is centered on the full viewport height */
+}
+
+.success-h3 {
+    font-weight: bold; /* Make the h3 text bold */
+    color: rgb(51, 164, 51); /* Primary color */
+    margin-top: 25%;
+    text-align: center;
+}
+
+.success-p {
+    color: #6c757d; /* Secondary color */
+    text-align: center;
+}
+
+.success-card {
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.success-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.document-type-card {
+    padding: 20px; 
+    margin-bottom: 30px;
+}
+
+.document-request-card{ 
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.document-type-card h4 {
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Style the label text */
+.card.document-type-card .request {
+    color: green;   
+}
+
+/* Style the checkbox and its checked state */
+.card.document-type-card input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 2px solid #008000; /* Green border for the checkbox */
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.2s;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.card.document-type-card input[type="checkbox"]:checked {
+    background-color: #008000; /* Green background when checked */
+    border-color: #008000; /* Green border when checked */
+}
+
+/* Style the check mark (pseudo-element ::before) to be white */
+.card.document-type-card input[type="checkbox"]:checked::before {
+    content: '\2713'; /* Unicode check mark symbol */
+    margin-left: 4px;
+    font-size: 13px;
+    color: #fff; /* White color for the check mark */
+}
+
+.card.document-type-card .document-title {
+    display: inline-block;
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.card.document-type-card label.request {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#request-history-table thead th {
+    text-align: center; /* Center horizontally */
+    vertical-align: middle; /* Center vertically */
+}
+
+#request-history-table tbody {
+    text-align: center;
+}
+
+/* Define styles for different request statuses */
+.status-pending {
+    color: rgb(255, 157, 0);
+    font-weight: bold;
+}
+
+.status-approved {
+    color: rgb(28, 112, 28);
+    font-weight: bold;
+}
+
+.status-declined {
+    color: rgb(195, 46, 46);
+    font-weight: bold;
+}
+
+.status-completed {
+    color: rgb(0, 42, 134);
+    font-weight: bold;
+}
+
+.text-yellow {
+    color: rgb(255, 157, 0);
+    font-weight: bold;
+}
+
+.text-green {
+    color: rgb(28, 112, 28);
+    font-weight: bold;
+}
+
+.blue-background {
+    background-color: rgb(0, 42, 134);
+    border-color: rgb(0, 42, 134);;
+    color: white; /* Optional: Change the text color to white */
+}
+
+.cancel-request{
+    margin-right: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -117,7 +117,4 @@ class DocumentRequestController extends Controller
         return redirect()->back()->with('success', 'Request canceled successfully');
     }
 
-
-
-
 }

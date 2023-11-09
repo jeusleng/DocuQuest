@@ -57,28 +57,24 @@
                                 <td>{{ $documentRequest->created_at }}</td>
                                 <td class="{{ $documentRequest->appointment_date_time == 'Not yet specified' ? 'text-green' : 'text-yellow' }}">
                                     {{ $documentRequest->appointment_date_time ?? 'Not yet specified' }}
-                                </td>                                
-                                
+                                </td>
                                 <td class="{{ getStatusClass($documentRequest->request_status) }}">
                                     {{ $documentRequest->request_status }}
                                 </td>
-                                
                                 <td>
                                     <div class="btn-toolbar">
                                         <div class="btn-group">
-                                            <form method="POST" action="{{ route('document-request.cancel', $documentRequest) }}">
+                                            <form id="cancel-form-{{ $documentRequest->id }}" method="POST" action="{{ route('document-request.cancel', $documentRequest) }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="button" class="btn btn-danger cancel-request" onclick="confirmCancellation(this)">Cancel</button>
                                             </form>
                                         </div>
                                         <div class="btn-group">
-                                            <button class="btn btn-primary blue-background">View</button>
+                                            <button class="btn btn-primary blue-background" data-toggle="modal" data-target="#documentRequestModal{{ $documentRequest->id }}">View</button>
                                         </div>
                                     </div>
                                 </td>
-                                
-                                
                             </tr>
                             @endforeach
                         </tbody>
@@ -89,7 +85,15 @@
     </div>
 </div>
 
-@endsection
+<!-- JavaScript for confirmation and modal -->
+<script>
+    function confirmCancellation(button) {
+        if (confirm("Are you sure you want to cancel this request?")) {
+            // If the user confirms, submit the form
+            button.closest('form').submit();
+        }
+    }
+</script>
 
 @php
 function getStatusClass($status) {
@@ -107,3 +111,36 @@ function getStatusClass($status) {
     }
 }
 @endphp
+
+@foreach ($documentRequests as $documentRequest)
+<!-- The modal -->
+<div class="modal fade" id="documentRequestModal{{ $documentRequest->id }}" tabindex="-1" role="dialog" aria-labelledby="documentRequestModal{{ $documentRequest->id }}Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="documentRequestModal{{ $documentRequest->id }}Label">{{ $documentRequest->documents->document_type }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Request Status:</strong> {{ $documentRequest->request_status }}</p>
+                <p><strong>Date Requested:</strong> {{ $documentRequest->created_at }}</p>
+                <p><strong>Appointment Date and Time:</strong> {{ $documentRequest->appointment_date_time ?: 'Not yet specified. This will be updated once your request is approved.' }}</p>
+                <p><strong>Number of Copies Requested:</strong> {{ $documentRequest->number_of_copies }}</p>
+                @if ($documentRequest->id_picture)
+                    <p><strong>Additional Requirements Uploaded:</strong></p>
+                    <img src="{{ asset('storage/' . $documentRequest->id_picture) }}" alt="Uploaded ID Picture" style="max-width: 100%;">
+                @else
+                    <p><strong>Additional Requirements Uploaded:</strong> None</p>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+@endsection

@@ -44,7 +44,7 @@
                             @csrf
 
                             <input type="hidden" name="user_id" value="{{ session('user_id') }}">
-                            <h5 class="category-label">Requirements Needed</h5> <br>
+                            <h5 class="category-label">Requirements</h5> <br>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="document_id">Document Type</label>
@@ -77,36 +77,8 @@
                                         <label for="id_picture">Learner's ID Picture</label>
                                         <input class="form-control" type="file" name="id_picture" id="id_picture" accept="image/*">
                                     </div>
+                                    
                                 </div>
-                            
-                            {{-- <label for="document_id">Document Type</label>
-                            <select name="document_id" id="document_id">
-                                @foreach($documents as $document)
-                                    <option value="{{ $document->document_id }}">{{ $document->document_type }}</option>
-                                @endforeach
-                            </select>
-
-                            <label for="number_of_copies">Number of Copies</label>
-                            <input type="number" name="number_of_copies" id="number_of_copies">
-
-                            <div class="form-group">
-                                <label for="purpose">Purpose of Request</label>
-                                <select id="purpose" name="purpose" class="form-control" required>
-                                    <option value="" disabled selected>Select Purpose</option>
-                                    @foreach ($purposes as $category => $purposeList)
-                                        <optgroup label="{{ $category }}">
-                                            @foreach ($purposeList as $purpose)
-                                                <option value="{{ $purpose }}">{{ $purpose }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="id_picture">School ID Picture</label>
-                                <input type="file" name="id_picture" id="id_picture" accept="image/*">
-                            </div> --}}
                             <div class="alert alert-info" role="alert">
                                 Your data is treated with confidentiality and is protected under the Data Privacy Act of
                                 2012 (RA No. 10173).

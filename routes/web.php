@@ -40,3 +40,4 @@ Route::get('/document-request/history', [DocumentRequestController::class, 'show
 
 Route::delete('/document-request/cancel/{documentRequest}', [DocumentRequestController::class, 'cancelRequest'])
     ->name('document-request.cancel');
+

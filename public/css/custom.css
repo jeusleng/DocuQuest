@@ -14,7 +14,7 @@ h1{
 
 h2{
     color: var(--secondary-color);
-    font-weight: normal;
+    font-weight: normal !important;
 }
 
 h4{
@@ -456,6 +456,22 @@ h4{
     color: var(--primary-color);
     font-size: 30px;
     text-align: center !important;
+}
+
+/* Apply primary color to titles */
+.about {
+    color: var(--primary-color); /* Change to your primary color */
+    font-weight: bold !important;
+}
+
+/* Apply bold and primary color to specific elements */
+h2, .card-title {
+    font-weight: bold;
+}
+
+/* Apply primary color to specific elements */
+.card-title {
+    color: var(--primary-color);
 }
 
 

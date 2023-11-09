@@ -21,7 +21,7 @@
                 <a class="nav-link" href="/document-request/history">Request History</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
+                <a class="nav-link" href="/about-us">About Us</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="">
@@ -44,12 +44,13 @@
             </div>
 
             <div class="mb-4">
-                <a href="/logout" class="common-button primary-button">LOGOUT</a>
+                {{-- <a href="/logout" class="common-button primary-button">LOGOUT</a> --}}
+                <a href="/document-request" class="common-button primary-button">Request a Document</a>
             </div>
         </div>
 
         <div class="col-md-6">
-            <img src="{{ asset('images/welcome.png') }}" alt="Welcome Image" class="img-fluid">
+            <img src="{{ asset('images/request.png') }}" alt="Welcome Image" class="img-fluid">
         </div>
     </div>
 </div>

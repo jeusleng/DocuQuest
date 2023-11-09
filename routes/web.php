@@ -45,6 +45,7 @@ Route::delete('/document-request/cancel/{documentRequest}', [DocumentRequestCont
 Route::get('/document-request/edit/{documentRequest}', [DocumentRequestController::class, 'edit'])->name('document-request.edit');
 Route::put('/document-request/update/{documentRequest}', [DocumentRequestController::class, 'update'])->name('document-request.update');
 
+Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us');
 
     
 

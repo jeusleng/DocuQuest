@@ -464,6 +464,11 @@ h4{
     font-weight: bold !important;
 }
 
+.process{
+    color: var(--primary-color); /* Change to your primary color */
+    font-weight: bold !important;
+}
+
 /* Apply bold and primary color to specific elements */
 h2, .card-title {
     font-weight: bold;

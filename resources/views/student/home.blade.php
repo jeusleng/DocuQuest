@@ -56,7 +56,7 @@
 </div>
 
 <div class="request-process-section">
-    <h2 class="text-center">Request Process</h2><br>
+    <h2 class="process text-center">Request Process</h2><br>
     <div class="row justify-content-center">
         <div class="col-md-2">
             <div class="request-card">

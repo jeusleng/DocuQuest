@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\DocumentRequest;
 use App\Models\Documents;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 
 class DocumentRequestController extends Controller
@@ -116,5 +118,73 @@ class DocumentRequestController extends Controller
 
         return redirect()->back()->with('success', 'Request canceled successfully');
     }
+
+    public function edit(DocumentRequests $documentRequest)
+    {
+        $documents = Documents::all(); // Retrieve document types from the database
+
+        $purposes = [
+            'Academic Records' => [
+                'Scholarship Application',
+                'College/University Admission',
+                'Enrollment in a New School',
+                'Transfer of School or University',
+                'Submission of Grades to Parents or Guardians',
+                'Internship or On-the-Job Training (OJT) Requirement',
+                'Graduation Requirements',
+                'Validation of Academic Credentials',
+            ],
+            'Government or Legal Requirements' => [
+                'Passport Application',
+                'Driver\'s License Application',
+                'National ID Application',
+                'Social Security System (SSS) Application',
+                'Government Employment Application',
+                'Legal Proceedings or Affidavits',
+                'Visa Application',
+            ],
+            'Personal Use or Records' => [
+                'Personal Record Keeping',
+                'Bank Loan or Financial Transactions',
+                'Housing Loan Application',
+                'Travel Abroad (e.g., for visa requirements)',
+                'Adoption Process',
+                'Insurance Claims',
+                'Business Transactions (e.g., business permits)',
+                'Migration or Emigration Documentation',
+            ],
+            'Other Special Requests' => [
+                'Disability Claims or Benefits',
+                'Sports or Athletic Scholarships',
+                'Grants or Financial Aid',
+                'Exchange Programs',
+                'Professional Development (e.g., teaching or medical certification)',
+                'Research or Thesis Documentation',
+                'Reimbursement of Education Expenses',
+            ],
+        ];
+
+        return view('student.edit-document-request', compact('documentRequest', 'documents', 'purposes'));
+    }
+
+    public function update(Request $request, DocumentRequests $documentRequest)
+    {
+        $request->validate([
+            'document_id' => 'required', // Make sure this matches the column name
+            'number_of_copies' => 'required|integer',
+            'purpose' => 'required',
+        ]);
+
+        $documentRequest->update([
+            'document_id' => $request->document_id,
+            'number_of_copies' => $request->number_of_copies,
+            'purpose' => $request->purpose,
+        ]);
+
+        return redirect()->route('document-request.history')->with('success', 'Document request updated successfully');
+    }
+
+
+
 
 }

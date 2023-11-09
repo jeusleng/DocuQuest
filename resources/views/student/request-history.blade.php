@@ -73,6 +73,7 @@
                                         <div class="btn-group">
                                             <button class="btn btn-primary blue-background" data-toggle="modal" data-target="#documentRequestModal{{ $documentRequest->id }}">View</button>
                                         </div>
+                                        <a href="{{ route('document-request.edit', $documentRequest) }}" class="btn btn-primary">Edit</a>
                                     </div>
                                 </td>
                             </tr>
@@ -115,32 +116,55 @@ function getStatusClass($status) {
 @foreach ($documentRequests as $documentRequest)
 <!-- The modal -->
 <div class="modal fade" id="documentRequestModal{{ $documentRequest->id }}" tabindex="-1" role="dialog" aria-labelledby="documentRequestModal{{ $documentRequest->id }}Label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="documentRequestModal{{ $documentRequest->id }}Label">{{ $documentRequest->documents->document_type }}</h5>
+                <h5 class="modal-title font-weight-bold" id="documentRequestModal{{ $documentRequest->id }}Label">{{ $documentRequest->documents->document_type }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>Request Status:</strong> {{ $documentRequest->request_status }}</p>
-                <p><strong>Date Requested:</strong> {{ $documentRequest->created_at }}</p>
-                <p><strong>Appointment Date and Time:</strong> {{ $documentRequest->appointment_date_time ?: 'Not yet specified. This will be updated once your request is approved.' }}</p>
-                <p><strong>Number of Copies Requested:</strong> {{ $documentRequest->number_of_copies }}</p>
-                @if ($documentRequest->id_picture)
-                    <p><strong>Additional Requirements Uploaded:</strong></p>
-                    <img src="{{ asset('storage/' . $documentRequest->id_picture) }}" alt="Uploaded ID Picture" style="max-width: 100%;">
-                @else
-                    <p><strong>Additional Requirements Uploaded:</strong> None</p>
-                @endif
+                <div class="row">
+                    <div class="col-6">
+                        <p><strong>Request Status:</strong> <span class="{{ getStatusClass($documentRequest->request_status) }}">{{ $documentRequest->request_status }}</span></p>                    
+                    </div>
+                    <div class="col-6">
+                        <p><strong>Date & Time Requested:</strong> {{ $documentRequest->created_at }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <p><strong>Appointment Date and Time:</strong></p>
+                        <p>{{ $documentRequest->appointment_date_time ?: 'Not yet specified. This will be updated once your request is approved.' }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <p><strong>Number of Copies Requested:</strong> {{ $documentRequest->number_of_copies }}</p>
+                    </div>
+                    <div class="col-6">
+                        @if ($documentRequest->id_picture)
+                        <p><strong>Additional Requirements Uploaded:</strong></p>
+                        <img src="data:image/png;base64,{{ base64_encode($documentRequest->id_picture) }}" alt="Uploaded ID Picture" style="max-width: 100%;">
+                        @else
+                        <p><strong>Additional Requirements Uploaded:</strong> None</p>
+                        @endif
+
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Edit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+
 @endforeach
 
 @endsection

@@ -434,6 +434,11 @@ h4{
     margin-right: 10px;
 }
 
+.modal-title{
+    color: var(--primary-color);
+    font-size: 30px;
+    text-align: center !important;
+}
 
 
 

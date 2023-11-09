@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,14 @@ Route::get('/document-request/history', [DocumentRequestController::class, 'show
 
 Route::delete('/document-request/cancel/{documentRequest}', [DocumentRequestController::class, 'cancelRequest'])
     ->name('document-request.cancel');
+
+Route::get('/document-request/edit/{documentRequest}', [DocumentRequestController::class, 'edit'])->name('document-request.edit');
+Route::put('/document-request/update/{documentRequest}', [DocumentRequestController::class, 'update'])->name('document-request.update');
+
+
+    
+
+
+
+
 

@@ -428,6 +428,24 @@ h4{
     background-color: rgb(0, 42, 134);
     border-color: rgb(0, 42, 134);;
     color: white; /* Optional: Change the text color to white */
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+.yellow-background{
+    background-color: rgb(255, 157, 0);
+    border-color: rgb(255, 157, 0);
+    color: white; /* Optional: Change the text color to white */
+    margin-right: -10px;
+    font-size: 12px;
+}
+
+.red-background{
+    background-color:rgb(195, 46, 46);
+    border-color: rgb(195, 46, 46);
+    color: white; /* Optional: Change the text color to white */
+    margin-right: 10px;
+    font-size: 12px;
 }
 
 .cancel-request{

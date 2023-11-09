@@ -67,13 +67,16 @@
                                             <form id="cancel-form-{{ $documentRequest->id }}" method="POST" action="{{ route('document-request.cancel', $documentRequest) }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger cancel-request" onclick="confirmCancellation(this)">Cancel</button>
+                                                <button type="button" class="btn btn-primary red-background" onclick="confirmCancellation(this)">Cancel</button>
                                             </form>
                                         </div>
                                         <div class="btn-group">
                                             <button class="btn btn-primary blue-background" data-toggle="modal" data-target="#documentRequestModal{{ $documentRequest->id }}">View</button>
                                         </div>
-                                        <a href="{{ route('document-request.edit', $documentRequest) }}" class="btn btn-primary">Edit</a>
+                                        <div class="btn-group">
+                                            <a class="btn btn-primary yellow-background" href="{{ route('document-request.edit', $documentRequest) }}">Edit</a>
+                                        </div>
+                                        
                                     </div>
                                 </td>
                             </tr>
@@ -157,7 +160,6 @@ function getStatusClass($status) {
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Edit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

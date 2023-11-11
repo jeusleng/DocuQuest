@@ -31,7 +31,6 @@ Route::post('/register', [UserController::Class, 'Register']);
 Route::get('/logout', [UserController::Class, 'Logout']);
 
 Route::get('/home', [HomeController::Class, 'GetHome']);
-Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
 Route::get('/insert-documents', [DocumentController::Class, 'insertDocuments']);
 
@@ -53,6 +52,11 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->name('profi
 
 // Route::get('/profile', 'ProfileController@index')->name('profile.index');
 // Route::put('/profile/update', 'ProfileController@update')->name('profile.update');
+
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
+
+Route::get('/admin/pending', [AdminController::class, 'showPending'])->name('admin.pending');
 
     
 

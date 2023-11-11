@@ -387,6 +387,13 @@ h4{
 #request-history-table thead th {
     text-align: center; /* Center horizontally */
     vertical-align: middle; /* Center vertically */
+    color: var(--secondary-color);
+}
+
+#request-history-table tbody .tdClass {
+    text-align: center; /* Center horizontally */
+    vertical-align: middle; /* Center vertically */
+    color: var(--secondary-color);
 }
 
 #request-history-table tbody {
@@ -479,8 +486,13 @@ h2, .card-title {
     color: var(--primary-color);
 }
 
+.what, .card-text{
+    color: var(--secondary-color);
+}
 
-
+.textLabel{
+    color: var(--secondary-color);
+}
 
 
 

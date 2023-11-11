@@ -48,15 +48,15 @@ class UserController extends Controller
                 'graduation_year' => $user->graduation_year,
                 'last_grade_attended' => $user->last_grade_attended,
                 'adviser_name' => $user->adviser_name,
+                'adviser_section' => $user->adviser_section,
                 'guardian_full_name' => $user->guardian_full_name,
                 'guardian_contact_number' => $user->guardian_contact_number,
             ]);
 
             if ($user->type === 'student') {
                 return redirect('/home');
-            }
-             else {
-                return redirect('/dashboard');
+            } elseif ($user->type === 'admin') {
+                return redirect()->route('admin.dashboard');
             }
         }else{
             session()->flash('invalid-login');
@@ -80,6 +80,7 @@ class UserController extends Controller
         'graduation_year' => 'nullable|string',
         'last_grade_attended' => 'nullable|string',
         'adviser_name' => 'nullable|string',
+        'adviser_section' => 'nullable|string',
         'email' => 'required|email|unique:users',
         'password' => 'required|min:8|confirmed',
         'guardian_full_name' => 'required|string',
@@ -101,6 +102,7 @@ class UserController extends Controller
             'graduation_year' => 'Graduation Year',
             'last_grade_attended' => 'Last Grade Attended',
             'adviser_name' => 'Adviser Name',
+            'adviser_section' => 'Alumni Section',
             'email' => 'Email',
             'password' => 'Password',
             'guardian_full_name' => 'Guardian Full Name',
@@ -135,6 +137,7 @@ class UserController extends Controller
         $users->graduation_year = $request->graduation_year;
         $users->last_grade_attended = $request->last_grade_attended;
         $users->adviser_name = $request->adviser_name;
+        $users->adviser_section = $request->adviser_section;
         $users->guardian_full_name = $request->guardian_full_name;
         $users->guardian_contact_number = $request->guardian_contact_number;
         $users->profile_picture = $request->profile_picture;
@@ -162,6 +165,7 @@ class UserController extends Controller
         session()->forget('graduation_year');
         session()->forget('last_grade_attended');
         session()->forget('adviser_name');
+        session()->forget('adviser_section');
         session()->forget('guardian_full_name');
         session()->forget('guardian_contact_number');
     
@@ -176,7 +180,7 @@ class UserController extends Controller
                 return redirect('/home');
             }
             else{
-                return redirect('/dashboard');
+                return redirect('admin.dashboard');
             }
         }
     }
@@ -199,14 +203,14 @@ class UserController extends Controller
 
     public function generateAdmin(){
         $users = new Users();
-        $users->type = 'student';
+        $users->type = 'admin';
         $users->email = 'sfhs-admin@gmail.com';
-        $users->first_name = 'super';
-        $users->middle_name = 'super';
-        $users->last_name = 'admin';
-        $users->date_of_birth = '10-01-1990';
-        $users->gender = 'Male';
-        $users->complete_address = 'San Felipe';
+        $users->first_name = '';
+        $users->middle_name = '';
+        $users->last_name = '';
+        $users->date_of_birth = '2002-10-10';
+        $users->gender = '';
+        $users->complete_address = '';
         $users->grade_level = '';
         $users->section = '';
         $users->learner_reference_number = '';
@@ -216,7 +220,7 @@ class UserController extends Controller
         $users->guardian_full_name = '';
         $users->guardian_contact_number = '';
         $users->profile_picture = '';
-        $users->password = bcrypt('admin');
+        $users->password = bcrypt('.2e1(]XTXB3~');
         $users->save();
 
         return redirect('/');

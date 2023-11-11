@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('graduation_year')->nullable();
             $table->string('last_grade_attended')->nullable();
             $table->string('adviser_name')->nullable();
+            $table->string('adviser_section')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->string('guardian_full_name');

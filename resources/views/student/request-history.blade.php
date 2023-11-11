@@ -52,9 +52,9 @@
                             @php $counter = 1; @endphp
                             @foreach ($documentRequests as $documentRequest)
                             <tr>
-                                <td>{{ $counter++ }}</td>
-                                <td>{{ $documentRequest->documents->document_type }}</td>
-                                <td>{{ $documentRequest->created_at }}</td>
+                                <td class="tdClass">{{ $counter++ }}</td>
+                                <td class="tdClass">{{ $documentRequest->documents->document_type }}</td>
+                                <td class="tdClass">{{ $documentRequest->created_at }}</td>
                                 <td class="{{ $documentRequest->appointment_date_time == 'Not yet specified' ? 'text-green' : 'text-yellow' }}">
                                     {{ $documentRequest->appointment_date_time ?? 'Not yet specified' }}
                                 </td>
@@ -130,30 +130,30 @@ function getStatusClass($status) {
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6">
-                        <p><strong>Request Status:</strong> <span class="{{ getStatusClass($documentRequest->request_status) }}">{{ $documentRequest->request_status }}</span></p>                    
+                        <p class="textLabel"><strong>Request Status:</strong> <span class="{{ getStatusClass($documentRequest->request_status) }}">{{ $documentRequest->request_status }}</span></p>                    
                     </div>
                     <div class="col-6">
-                        <p><strong>Date & Time Requested:</strong> {{ $documentRequest->created_at }}</p>
+                        <p class="textLabel"><strong>Date & Time Requested:</strong> {{ $documentRequest->created_at }}</p>
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-12">
-                        <p><strong>Appointment Date and Time:</strong></p>
+                        <p class="textLabel"><strong>Appointment Date and Time:</strong></p>
                         <p>{{ $documentRequest->appointment_date_time ?: 'Not yet specified. This will be updated once your request is approved.' }}</p>
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-6">
-                        <p><strong>Number of Copies Requested:</strong> {{ $documentRequest->number_of_copies }}</p>
+                        <p class="textLabel"><strong>Number of Copies Requested:</strong> {{ $documentRequest->number_of_copies }}</p>
                     </div>
                     <div class="col-6">
                         @if ($documentRequest->id_picture)
-                        <p><strong>Additional Requirements Uploaded:</strong></p>
+                        <p class="textLabel"><strong>Additional Requirements Uploaded:</strong></p>
                         <img src="data:image/png;base64,{{ base64_encode($documentRequest->id_picture) }}" alt="Uploaded ID Picture" style="max-width: 100%;">
                         @else
-                        <p><strong>Additional Requirements Uploaded:</strong> None</p>
+                        <p class="textLabel"><strong>Additional Requirements Uploaded:</strong> None</p>
                         @endif
 
                     </div>

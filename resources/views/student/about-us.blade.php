@@ -24,7 +24,7 @@
                 <a class="nav-link active" href="/about-us">About Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('profile.index') }}">
                     <i class="fas fa-user"></i>
                 </a>
             </li>
@@ -36,10 +36,10 @@
         <div class="row" style="margin-top: 90px;">
             <!-- First row with text and image -->
             <div class="col-md-6">
-                <h2 class="about">About Us</h2>
-                <p>
+                <h1 class="about">About Us</h1>
+                <h4>
                     Welcome to DocuQuest, your one-stop solution for document requests. Our website simplifies the process of requesting important documents by providing a convenient and user-friendly platform.
-                </p>
+                </h4>
             </div>
             <div class="col-md-6">
                 <img src="{{ asset('images/welcome.png') }}" alt="Welcome Image" class="img-fluid">
@@ -50,8 +50,8 @@
                 <img src="{{ asset('images/success.png') }}" alt="Success Image" class="img-fluid">
             </div>
             <div class="col-md-6">
-                <h2 class="about">What We Do</h2>
-                <p>
+                <h1 class="about">What We Do</h1>
+                <p class="what">
                     What we do is simple. At DocuQuest, we bridge the gap between students and alumni of San Felipe High School, offering a seamless and convenient platform for requesting a wide range of essential documents. Our user-friendly service caters to your diverse needs, whether you're seeking academic records, legal documents, or personal records. <br><br>We understand the importance of quick and hassle-free access to these documents, and our mission is to make the entire process efficient and stress-free. By providing a secure and confidential environment, we ensure that your sensitive information is handled with the utmost care. Furthermore, we offer transparent request tracking, keeping you informed every step of the way. With DocuQuest, your document requests are in safe hands, and your satisfaction is our top priority
                 </p>
             </div>

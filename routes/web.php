@@ -31,6 +31,7 @@ Route::post('/register', [UserController::Class, 'Register']);
 Route::get('/logout', [UserController::Class, 'Logout']);
 
 Route::get('/home', [HomeController::Class, 'GetHome']);
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
 Route::get('/insert-documents', [DocumentController::Class, 'insertDocuments']);
 
@@ -46,6 +47,12 @@ Route::get('/document-request/edit/{documentRequest}', [DocumentRequestControlle
 Route::put('/document-request/update/{documentRequest}', [DocumentRequestController::class, 'update'])->name('document-request.update');
 
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about-us');
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+// Route::get('/profile', 'ProfileController@index')->name('profile.index');
+// Route::put('/profile/update', 'ProfileController@update')->name('profile.update');
 
     
 

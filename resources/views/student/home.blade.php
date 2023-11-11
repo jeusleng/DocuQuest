@@ -24,7 +24,7 @@
                 <a class="nav-link" href="/about-us">About Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="{{ route('profile.index') }}">
                     <i class="fas fa-user"></i>
                 </a>
             </li>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="mb-4">
-                {{-- <a href="/logout" class="common-button primary-button">LOGOUT</a> --}}
+                <a href="/logout" class="common-button primary-button">LOGOUT</a>
                 <a href="/document-request" class="common-button primary-button">Request a Document</a>
             </div>
         </div>

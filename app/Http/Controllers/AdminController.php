@@ -56,7 +56,10 @@ class AdminController extends Controller
         if ($this->checkSession()) {
             return $this->checkSession();
         }
-        
-        return view('admin.pending');
+
+        // Fetch pending document requests
+        $pendingRequests = DocumentRequests::where('request_status', 'pending')->get();
+
+        return view('admin.pending', compact('pendingRequests'));
     }
 }

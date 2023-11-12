@@ -9,11 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Buttons</title>
+    <title>SFHS Admin - Pending Requests</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    
+
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -29,10 +29,11 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                href="{{ route('admin.dashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -54,13 +55,13 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-                aria-controls="collapseTwo">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Document Requests</span>
                 </a>
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
-                data-parent="#accordionSidebar">
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item active" href="{{ route('admin.pending') }}">Pending Requests</a>
                         <a class="collapse-item" href="cards.html">Approved Requests</a>
@@ -68,7 +69,7 @@
                     </div>
                 </div>
             </li>
- 
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -90,13 +91,6 @@
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users Management</span></a>
             </li>
-
-            {{-- <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Report Generation</span></a>
-            </li> --}}
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -132,15 +126,15 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">SFHS Admin</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{ asset('images/undraw_profile.svg') }}">
-                                    
+                                <img class="img-profile rounded-circle" src="{{ asset('images/undraw_profile.svg') }}">
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -156,77 +150,126 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-0 text-gray-800" style="color: #c53f3f !important; font-weight: bold;">Pending Requests</h1><br>
+                    <h1 class="h3 mb-0 text-gray-800" style="color: #c53f3f !important; font-weight: bold;">Pending
+                        Requests</h1><br>
 
                     <div class="row">
 
                         <div class="col-lg-15">
 
                             <!-- Circle Buttons -->
-                            <div class="card shadow mb-4">
-                                <div class="card-body">
-                                    <p>INSERT TABLE HERE</p>
-                                    
+                            <div class="container signup-container">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-11">
+                                        <div class="card history-card">
+                                            <div class="card-body">
+                                                <table class="table table-bordered text-center" id="pending-requests-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No.</th>
+                                                            <th>Name of Student</th>
+                                                            <th>Document Type</th>
+                                                            <th>Date Requested</th>
+                                                            <th>Appointment Date and Time</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @php $counter = 1; @endphp
+                                                        @forelse ($pendingRequests as $request)
+                                                            <tr>
+                                                                <td>{{ $counter++ }}</td>
+                                                                <td>{{ $request->users->first_name }} {{ $request->users->last_name }}</td>
+                                                                <td>{{ $request->documents->document_type }}</td>
+                                                                <td>{{ $request->created_at }}</td>
+                                                                <td class="{{ is_null($request->appointment_date_time) ? 'text-yellow' : 'text-green' }}">
+                                                                    {{ $request->appointment_date_time ?? 'Not yet specified' }}
+                                                                </td>
+                                                                <td class="{{ is_null($request->appointment_date_time) ? 'text-yellow' : 'text-green' }}">
+                                                                    {{ $request->request_status }}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="btn-toolbar">
+                                                                        <div class="btn-group">
+                                                                            <button class="btn btn-sm btn-primary blue-background" data-toggle="modal"
+                                                                                data-target="#documentRequestModal{{ $request->id }}">View</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="7" class="text-center">No pending requests.</td>
+                                                            </tr>
+                                                        @endforelse
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
 
+
+                        </div>
+                        <!-- /.container-fluid -->
+
+                    </div>
+                    <!-- End of Main Content -->
+
+                    <!-- Footer -->
+                    <footer class="sticky-footer bg-white">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                <span>Copyright &copy; Your Website 2020</span>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End of Footer -->
 
                 </div>
-                <!-- /.container-fluid -->
+                <!-- End of Content Wrapper -->
 
             </div>
-            <!-- End of Main Content -->
+            <!-- End of Page Wrapper -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="/logout">Logout</a>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+            </div>
 
-        </div>
-        <!-- End of Content Wrapper -->
+            <!-- Bootstrap core JavaScript-->
+            <script src="vendor/jquery/jquery.min.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    </div>
-    <!-- End of Page Wrapper -->
+            <!-- Core plugin JavaScript-->
+            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-   <!-- Logout Modal-->
-   <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-   aria-hidden="true">
-   <div class="modal-dialog" role="document">
-       <div class="modal-content">
-           <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-               <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                   <span aria-hidden="true">×</span>
-               </button>
-           </div>
-           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-           <div class="modal-footer">
-               <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-               <a class="btn btn-primary" href="/logout">Logout</a>
-           </div>
-       </div>
-   </div>
-</div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 

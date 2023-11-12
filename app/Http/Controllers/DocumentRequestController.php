@@ -184,7 +184,4 @@ class DocumentRequestController extends Controller
         return redirect()->route('document-request.history')->with('success', 'Document request updated successfully');
     }
 
-
-
-
 }

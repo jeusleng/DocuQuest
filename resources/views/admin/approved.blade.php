@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SFHS Admin - Pending Requests</title>
+    <title>SFHS Admin - Approved Requests</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -63,8 +63,8 @@
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="{{ route('admin.pending') }}">Pending Requests</a>
-                        <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
+                        <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
+                        <a class="collapse-item active" href="{{ route('admin.approved') }}">Approved Requests</a>
                         <a class="collapse-item" href="cards.html">Declined Requests</a>
                         <a class="collapse-item" href="cards.html">Completed Requests</a>
                     </div>
@@ -151,7 +151,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-0 text-gray-800 text-center" style="color: #c53f3f !important; font-weight: bold;">Pending
+                    <h1 class="h3 mb-0 text-gray-800 text-center" style="color: #c53f3f !important; font-weight: bold;">Approved
                         Requests</h1><br>
 
                     <div class="row">
@@ -164,7 +164,7 @@
                                     <div class="col-md-11">
                                         <div class="card history-card">
                                             <div class="card-body">
-                                                <table class="table table-bordered text-center" id="pending-requests-table">
+                                                <table class="table table-bordered text-center" id="approved-requests-table">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
@@ -178,7 +178,7 @@
                                                     </thead>
                                                     <tbody>
                                                         @php $counter = 1; @endphp
-                                                        @forelse ($pendingRequests as $request)
+                                                        @forelse ($approvedRequests as $request)
                                                             <tr>
                                                                 <td>{{ $counter++ }}</td>
                                                                 <td>{{ $request->users->first_name }} {{ $request->users->last_name }}</td>
@@ -199,7 +199,7 @@
                                                             </tr>
                                                         @empty
                                                             <tr>
-                                                                <td colspan="7" class="text-center">No pending requests.</td>
+                                                                <td colspan="7" class="text-center">No approved requests yet.</td>
                                                             </tr>
                                                         @endforelse
                                                     </tbody>

@@ -58,9 +58,7 @@ Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name(
 
 Route::get('/admin/pending', [AdminController::class, 'showPending'])->name('admin.pending');
 
-    
+Route::get('/admin/view-pending/{id}', [AdminController::class, 'editPending'])->name('admin.edit-pending');
+Route::post('admin/edit-pending/{id}', [AdminController::class, 'updatePending'])->name('admin.update-pending');
 
-
-
-
-
+Route::get('/admin/approved', [AdminController::class, 'showApproved'])->name('admin.approved');

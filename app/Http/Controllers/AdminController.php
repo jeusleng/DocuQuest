@@ -116,4 +116,25 @@ class AdminController extends Controller
         return view('admin.approved', compact('approvedRequests'));
     }
 
+    public function showUpcoming()
+    {
+        if ($this->checkSession()) {
+            return $this->checkSession();
+        }
+        
+        $upcomingAppointments = DocumentRequests::where('request_status', 'Approved')->get();
+
+        return view('admin.upcoming', compact('upcomingAppointments'));
+    }
+
+    public function showCompleted()
+    {
+        if ($this->checkSession()) {
+            return $this->checkSession();
+        }   
+        
+        $completedAppointments = DocumentRequests::where('request_status', 'Completed')->get();
+
+        return view('admin.completed', compact('completedAppointments'));
+    }
 }

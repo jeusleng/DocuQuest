@@ -65,3 +65,8 @@ Route::get('/admin/approved', [AdminController::class, 'showApproved'])->name('a
 
 Route::post('/document-request/upload-receipt/{documentRequest}', [DocumentRequestController::class, 'uploadReceipt'])
     ->name('document-request.uploadReceipt');
+
+Route::get('/admin/upcoming', [AdminController::class, 'showUpcoming'])->name('admin.upcoming');
+Route::get('/admin/completed', [AdminController::class, 'showCompleted'])->name('admin.completed');
+
+Route::get('/acknowledgment-receipt/{documentRequest}', [DocumentRequestController::class, 'viewAcknowledgmentReceipt'])->name('viewAcknowledgmentReceipt');

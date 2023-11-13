@@ -42,6 +42,7 @@
                         <form class="signup-form" method="POST" action="/register">
                             <h3 class="request-title">Document Request Form</h3>
                             @csrf
+                            <input type="hidden" name="created_at" id="created_at" value="">
 
                             <input type="hidden" name="user_id" value="{{ session('user_id') }}">
                             <h5 class="category-label">Requirements</h5> <br>
@@ -86,11 +87,18 @@
 
                             <button type="submit" id="submit-button" class="common-button btn-primary btn-block">Submit Request</button>
                         </form>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
+<script>
+    // Set the value of the hidden input to the current date and time
+    document.getElementById('created_at').value = new Date().toISOString().slice(0, 19).replace("T", " ");
 
+    // Optional: Display the formatted date and time in the console for verification
+    console.log('Submission Time:', document.getElementById('created_at').value);
+</script>
 @endsection

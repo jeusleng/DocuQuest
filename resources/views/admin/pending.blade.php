@@ -10,15 +10,13 @@
     <meta name="author" content="">
 
     <title>SFHS Admin - Pending Requests</title>
-
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
 
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
 </head>
@@ -44,7 +42,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -81,11 +79,13 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">Upcoming</a>
-                        <a class="collapse-item" href="utilities-border.html">Completed</a>
+                        <a class="collapse-item" href="{{ route('admin.upcoming') }}">Upcoming</a>
+                        <a class="collapse-item" href="{{ route('admin.completed') }}">Completed</a>
                     </div>
                 </div>
             </li>
+
+
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
@@ -151,7 +151,8 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-0 text-gray-800 text-center" style="color: #c53f3f !important; font-weight: bold;">Pending
+                    <h1 class="h3 mb-0 text-gray-800 text-center"
+                        style="color: #c53f3f !important; font-weight: bold;">Pending
                         Requests</h1><br>
 
                     <div class="row">
@@ -164,14 +165,15 @@
                                     <div class="col-md-11">
                                         <div class="card history-card">
                                             <div class="card-body">
-                                                <table class="table table-bordered text-center" id="pending-requests-table">
+                                                <table class="table table-bordered text-center"
+                                                    id="pending-requests-table">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
                                                             <th>Name of Student</th>
                                                             <th>Document Type</th>
                                                             <th>Date Requested</th>
-                                                            <th>Appointment Date and Time</th>
+                                                            <th>Appointment Date</th>
                                                             <th>Status</th>
                                                             <th>Action</th>
                                                         </tr>
@@ -181,25 +183,32 @@
                                                         @forelse ($pendingRequests as $request)
                                                             <tr>
                                                                 <td>{{ $counter++ }}</td>
-                                                                <td>{{ $request->users->first_name }} {{ $request->users->last_name }}</td>
+                                                                <td>{{ $request->users->first_name }}
+                                                                    {{ $request->users->last_name }}</td>
                                                                 <td>{{ $request->documents->document_type }}</td>
-                                                                <td>{{ $request->created_at }}</td>
-                                                                <td class="{{ is_null($request->appointment_date_time) ? 'text-yellow' : 'text-green' }}">
-                                                                    {{ $request->appointment_date_time ?? 'Not yet specified' }}
-                                                                </td>
-                                                                <td class="{{ is_null($request->appointment_date_time) ? 'text-yellow' : 'text-green' }}">
+                                                                <td>{{ $request->created_at ? \Carbon\Carbon::parse($request->created_at)->format('M d, Y h:i A') : '' }}</td>
+            
+                                                                <td
+                                                                    class="{{ is_null($request->appointment_date_time) ? 'text-yellow' : 'text-green' }}">
+                                                                    {{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('M d, Y h:i A') : 'Not yet specified' }}
+                                                                </td>                                                                
+                                                                <td
+                                                                    class="{{ is_null($request->appointment_date_time) ? 'text-yellow' : 'text-green' }}">
                                                                     {{ $request->request_status }}
                                                                 </td>
                                                                 <td>
                                                                     <div class="btn-toolbar">
                                                                         <div class="btn-group">
-                                                                            <a href="{{ route('admin.edit-pending', ['id' => $request->document_request_id]) }}" class="btn btn-sm btn-primary blue-background">View</a>                                                                        </div>
+                                                                            <a href="{{ route('admin.edit-pending', ['id' => $request->document_request_id]) }}"
+                                                                                class="btn btn-sm btn-primary blue-background">View</a>
+                                                                        </div>
                                                                     </div>
                                                                 </td>
                                                             </tr>
                                                         @empty
                                                             <tr>
-                                                                <td colspan="7" class="text-center">No pending requests.</td>
+                                                                <td colspan="7" class="text-center">No pending
+                                                                    requests.</td>
                                                             </tr>
                                                         @endforelse
                                                     </tbody>
@@ -209,7 +218,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
 
                         </div>
@@ -259,16 +268,17 @@
                     </div>
                 </div>
             </div>
+            <!-- Bootstrap core JavaScript from CDN -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            <!-- Bootstrap core JavaScript-->
-            <script src="vendor/jquery/jquery.min.js"></script>
-            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Vendor scripts -->
+            <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-            <!-- Core plugin JavaScript-->
-            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Custom scripts for all pages -->
+            <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
-            <!-- Custom scripts for all pages-->
-            <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 

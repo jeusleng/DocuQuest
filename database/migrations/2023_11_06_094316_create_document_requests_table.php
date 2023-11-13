@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('purpose');
             $table->string('request_status')->default('Pending');
             $table->dateTime('appointment_date_time')->nullable();
-            $table->string('acknowledgment_receipt')->nullable();
+            $table->binary('acknowledgment_receipt')->nullable();
             $table->binary('id_picture')->nullable(); // Add the new field for ID picture
             $table->timestamps();
 

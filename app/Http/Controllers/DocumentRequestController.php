@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Response;
 
 class DocumentRequestController extends Controller
 {
+    public $timestamps = false;
+
     private function checkSession(){
         if(session()->missing('user_id')){
             return redirect('/');
@@ -74,34 +76,39 @@ class DocumentRequestController extends Controller
     }
 
     public function storeRequest(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|integer',
-            'document_id' => 'required|integer',
-            'number_of_copies' => 'required|integer',
-            'purpose' => 'required|string',
-            'id_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate and restrict file types
-        ]);
+{
+    $request->validate([
+        'user_id' => 'required|integer',
+        'document_id' => 'required|integer',
+        'number_of_copies' => 'required|integer',
+        'purpose' => 'required|string',
+        'id_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate and restrict file types
+    ]);
 
-        // Handle the uploaded image file
-        if ($request->hasFile('id_picture')) {
-            $file = $request->file('id_picture');
-            $path = $file->store('id_pictures'); // Store the file in the 'id_pictures' directory
-        } else {
-            $path = null; // No file was uploaded
-        }
-
-        // Create a new document request
-        DocumentRequests::create([
-            'user_id' => $request->user_id,
-            'document_id' => $request->document_id,
-            'number_of_copies' => $request->number_of_copies,
-            'purpose' => $request->purpose,
-            'id_picture' => $path, // Store the file path in the database
-        ]);
-
-        return redirect()->route('document-request.history')->with('success', 'Document request submitted successfully');
+    // Handle the uploaded image file
+    if ($request->hasFile('id_picture')) {
+        $file = $request->file('id_picture');
+        $path = $file->store('id_pictures'); // Store the file in the 'id_pictures' directory
+    } else {
+        $path = null; // No file was uploaded
     }
+
+    // Create a new document request using the value from the hidden input
+    $requestData = [
+        'user_id' => $request->user_id,
+        'document_id' => $request->document_id,
+        'number_of_copies' => $request->number_of_copies,
+        'purpose' => $request->purpose,
+        'id_picture' => $path, // Store the file path in the database
+        'created_at' => $request->input('created_at'), // Use the value from the hidden input
+    ];
+
+    DocumentRequests::create($requestData);
+
+    return redirect()->route('document-request.history')->with('success', 'Document request submitted successfully');
+}
+
+
 
     public function showRequestHistory(Request $request)
     {
@@ -191,16 +198,31 @@ class DocumentRequestController extends Controller
         'acknowledgment_receipt' => 'required|mimes:pdf,jpg,png|max:2048',
     ]);
 
-    // Store the uploaded receipt
+    // Check if the document request already has an acknowledgment receipt
+    if ($documentRequest->acknowledgment_receipt) {
+        // Delete the existing acknowledgment receipt file
+        Storage::delete($documentRequest->acknowledgment_receipt);
+    }
+
+    // Store the newly uploaded acknowledgment receipt
     $acknowledgmentReceipt = $request->file('acknowledgment_receipt');
     $receiptPath = $acknowledgmentReceipt->store('acknowledgment_receipts', 'public');
 
-    // Update the document request with the receipt path
+    // Update the document request with the new receipt path and set the status to "Completed"
     $documentRequest->update([
         'acknowledgment_receipt' => $receiptPath,
+        'request_status' => 'Completed',
+        'updated_at' => now(),
     ]);
 
     return redirect()->back()->with('success', 'Acknowledgment receipt uploaded successfully!');
 }
+
+public function viewAcknowledgmentReceipt(DocumentRequests $documentRequest)
+{
+    return response($documentRequest->acknowledgment_receipt)
+        ->header('Content-Type', 'pdf,jpg,png'); // Adjust the Content-Type based on your actual image type
+}
+
 
 }

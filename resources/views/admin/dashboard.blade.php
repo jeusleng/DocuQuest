@@ -11,13 +11,15 @@
 
     <title>SFHS Admin - Dashboard</title>
 
-    <!-- Custom fonts for this template-->
+    <!-- Custom fonts for this template -->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 
-    <!-- Custom styles for this template-->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+
+    <!-- Custom styles for this template -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -30,7 +32,8 @@
         <ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                href="{{ route('admin.dashboard') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -66,7 +69,7 @@
                     </div>
                 </div>
             </li>
- 
+
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -77,8 +80,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">Upcoming</a>
-                        <a class="collapse-item" href="utilities-border.html">Completed</a>
+                        <a class="collapse-item" href="{{ route('admin.upcoming') }}">Upcoming</a>
+                        <a class="collapse-item" href="{{ route('admin.completed') }}">Completed</a>
                     </div>
                 </div>
             </li>
@@ -130,15 +133,15 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">SFHS Admin</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{ asset('images/undraw_profile.svg') }}">
-                                    
+                                <img class="img-profile rounded-circle" src="{{ asset('images/undraw_profile.svg') }}">
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -155,7 +158,8 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800" style="color: #c53f3f !important; font-weight: bold;">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800" style="color: #c53f3f !important; font-weight: bold;">
+                            Dashboard</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
@@ -171,7 +175,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Registered Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalStudents }}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalStudents }}
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -207,7 +212,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                                 Approved Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalApprovedRequests }}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                {{ $totalApprovedRequests }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-thumbs-up fa-2x text-gray-300"></i>
@@ -225,7 +231,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalPendingRequests }}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                {{ $totalPendingRequests }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clock fa-2x text-gray-300"></i>
@@ -248,8 +255,9 @@
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
                                     <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdown-toggle" href="#" role="button"
+                                            id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -274,11 +282,13 @@
                         <!-- Pie Chart -->
                         <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Documents Requested</h6>
                                     <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdown-toggle" href="#" role="button"
+                                            id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
@@ -296,9 +306,10 @@
                                         <canvas id="myPieChart"></canvas>
                                     </div>
                                     <div class="mt-4 text-center small">
-                                        @foreach($documentTypes as $key => $type)
+                                        @foreach ($documentTypes as $key => $type)
                                             <span class="mr-2">
-                                                <i class="fas fa-circle text-{{ $colors[$key] }}"></i> {{ $type }}
+                                                <i class="fas fa-circle text-{{ $colors[$key] }}"></i>
+                                                {{ $type }}
                                             </span>
                                         @endforeach
                                     </div>
@@ -433,13 +444,14 @@
                                     <div class="text-center">
                                         <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
                                             src="{{ asset('images/undraw_posting_photo.svg') }}" alt="...">
-                                            
+
                                     </div>
                                     <p>Add some quality, svg illustrations to your project courtesy of <a
                                             target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
                                         constantly updated collection of beautiful svg images that you can use
                                         completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
+                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations
+                                        on
                                         unDraw &rarr;</a>
                                 </div>
                             </div>
@@ -453,7 +465,8 @@
                                     <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
                                         CSS bloat and poor page performance. Custom CSS classes are used to create
                                         custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
+                                    <p class="mb-0">Before working with this theme, you should become familiar with
+                                        the
                                         Bootstrap framework, especially the utility classes.</p>
                                 </div>
                             </div>
@@ -533,21 +546,21 @@
     </script>
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-    
+
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    
+
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-    
+
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
-    
+
     <!-- Page level custom scripts -->
     <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-    
+
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 
 </body>

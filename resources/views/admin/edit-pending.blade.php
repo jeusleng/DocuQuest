@@ -46,7 +46,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -65,7 +65,7 @@
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="{{ route('admin.pending') }}">Pending Requests</a>
+                        <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
                         <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
                         <a class="collapse-item" href="cards.html">Declined Requests</a>
                         <a class="collapse-item" href="cards.html">Completed Requests</a>
@@ -83,8 +83,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="utilities-color.html">Upcoming</a>
-                        <a class="collapse-item" href="utilities-border.html">Completed</a>
+                        <a class="collapse-item" href="{{ route('admin.upcoming') }}">Upcoming</a>
+                        <a class="collapse-item" href="{{ route('admin.completed') }}">Completed</a>
                     </div>
                 </div>
             </li>
@@ -129,7 +129,8 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">SFHS Admin</span>
-                                <img class="img-profile rounded-circle" src="{{ asset('images/undraw_profile.svg') }}">
+                                <img class="img-profile rounded-circle"
+                                    src="{{ asset('images/undraw_profile.svg') }}">
 
                             </a>
                             <!-- Dropdown - User Information -->
@@ -227,6 +228,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <br>
 
                                                 <!-- Document Request Details -->
                                                 <div class="mb-4">
@@ -266,6 +268,29 @@
                                                         </div>
                                                     </div>
                                                     <br>
+
+                                                    <h5 class="category-label">Acknowledgement Receipt</h5>
+                                                    <div class="row">
+                                                        <!-- Document Type and Purpose of Request -->
+                                                        <div class="col-md-12 mb-3">
+                                                            <label for="document_type">Acknowledgement Receipt</label>
+                                                            @if ($documentRequest->acknowledgment_receipt)
+                                                                <input type="text" class="form-control"
+                                                                    id="document_type" name="document_type"
+                                                                    value="{{ $documentRequest->acknowledgment_receipt }}"
+                                                                    disabled>
+                                                            @else
+                                                                <input type="text" class="form-control"
+                                                                    id="document_type" name="document_type"
+                                                                    value="Student did not upload acknowledgment receipt yet."
+                                                                    disabled>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <br>
                                                     <h5 class="category-label">Action</h5>
                                                     <div class="row">
                                                         <!-- Request Status, Appointment Date, and Appointment Time -->
@@ -289,109 +314,112 @@
                                                             </select>
 
                                                         </div>
-                                                       <!-- Appointment Date and Time -->
-<div class="col-md-6 mb-3">
-    <label for="appointment_date_time">Appointment Date and Time</label>
-    <input type="datetime-local" class="form-control"
-        id="appointment_date_time" name="appointment_date_time"
-        value="{{ $documentRequest->appointment_date_time ? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i') : '' }}">
-</div>
-
-</div>
-
-
+                                                        <!-- Appointment Date and Time -->
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="appointment_date_time">Appointment Date and
+                                                                Time</label>
+                                                            <input type="datetime-local" class="form-control"
+                                                                id="appointment_date_time"
+                                                                name="appointment_date_time"
+                                                                value="{{ $documentRequest->appointment_date_time? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i'): '' }}">
+                                                        </div>
 
                                                     </div>
+
                                                 </div>
-                                                <!-- Update Button -->
-                                                <div class="text-center">
-                                                    <button type="submit"
-                                                        class="common-button btn-primary btn-block">Update</button>
-                                                </div>
+                                            </div>
+                                            <!-- Update Button -->
+                                            <div class="text-center"
+                                                style="margin-top: -30px; margin-bottom: 30px; margin-left: 20px; margin-right: 20px">
+                                                <button type="submit"
+                                                    class="common-button btn-primary btn-block">Update</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                         </div>
-                        </form>
-
-
-
-
-
-
                     </div>
-                    <!-- /.container-fluid -->
+                    </form>
+
+
+
+
+
 
                 </div>
-                <!-- End of Main Content -->
-
-                <!-- Footer -->
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Your Website 2020</span>
-                        </div>
-                    </div>
-                </footer>
-                <!-- End of Footer -->
+                <!-- /.container-fluid -->
 
             </div>
-            <!-- End of Content Wrapper -->
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
         </div>
-        <!-- End of Page Wrapper -->
+        <!-- End of Content Wrapper -->
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+    </div>
+    <!-- End of Page Wrapper -->
 
-        <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="/logout">Logout</a>
-                    </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Bootstrap core JavaScript from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Vendor scripts -->
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages -->
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
-        <script src="js/sb-admin-2.min.js"></script>
-        <script>
-            // Function to format the datetime input based on the selected AM/PM
-            function updateDateTimeFormat() {
-                const datetimeInput = document.getElementById('appointment_date_time');
-                const selectedDatetime = datetimeInput.value;
-        
-                if (selectedDatetime) {
-                    const datetimeComponents = selectedDatetime.split('T');
-                    const date = datetimeComponents[0];
-                    const time = datetimeComponents[1].substring(0, 5);
-        
-                    datetimeInput.value = `${date}T${time}`;
-                }
+    <!-- Additional scripts -->
+    <script>
+        // Function to format the datetime input based on the selected AM/PM
+        function updateDateTimeFormat() {
+            const datetimeInput = document.getElementById('appointment_date_time');
+            const selectedDatetime = datetimeInput.value;
+
+            if (selectedDatetime) {
+                const datetimeComponents = selectedDatetime.split('T');
+                const date = datetimeComponents[0];
+                const time = datetimeComponents[1].substring(0, 5);
+
+                datetimeInput.value = `${date}T${time}`;
             }
-        </script>
-        
+        }
+    </script>
 
 </body>
 

@@ -54,10 +54,12 @@
                                     <tr>
                                         <td class="tdClass">{{ $counter++ }}</td>
                                         <td class="tdClass">{{ $documentRequest->documents->document_type }}</td>
-                                        <td class="tdClass">{{ $documentRequest->created_at }}</td>
+                                        <td class="tdClass">
+                                            {{ $documentRequest->created_at ? \Carbon\Carbon::parse($documentRequest->created_at)->format('M d, Y h:i A') : '' }}
+                                        </td>
                                         <td
-                                            class="{{ $documentRequest->appointment_date_time == 'Not yet specified' ? 'text-green' : 'text-yellow' }}">
-                                            {{ $documentRequest->appointment_date_time ?? 'Not yet specified' }}
+                                            class="{{ $documentRequest->appointment_date_time == null ? 'status-pending' : 'status-approved' }}">
+                                            {{ $documentRequest->appointment_date_time ? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') : 'Not yet specified' }}
                                         </td>
                                         <td class="{{ getStatusClass($documentRequest->request_status) }}">
                                             {{ $documentRequest->request_status }}
@@ -74,7 +76,9 @@
                                                     </form>
                                                 </div>
                                                 <div class="btn-group">
-                                                    <button class="btn btn-primary blue-background" data-toggle="modal" data-target="#documentRequestModal{{ $documentRequest->document_request_id }}" onclick="openModal({{ $documentRequest->document_request_id }})">View</button>
+                                                    <button class="btn btn-primary blue-background" data-toggle="modal"
+                                                        data-target="#documentRequestModal{{ $documentRequest->document_request_id }}"
+                                                        onclick="openModal({{ $documentRequest->document_request_id }})">View</button>
                                                 </div>
                                                 <div class="btn-group">
                                                     <a class="btn btn-primary yellow-background"
@@ -132,16 +136,21 @@
 
     @foreach ($documentRequests as $documentRequest)
         <!-- The modal -->
-        <div class="modal fade" id="documentRequestModal{{ $documentRequest->document_request_id }}" tabindex="-1" role="dialog" aria-labelledby="documentRequestModal{{ $documentRequest->document_request_id }}Label" aria-hidden="true">            
-            <div class="modal-dialog modal-lg" role="document">
+        <div class="modal fade" id="documentRequestModal{{ $documentRequest->document_request_id }}" tabindex="-1"
+            role="dialog" aria-labelledby="documentRequestModal{{ $documentRequest->document_request_id }}Label"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title font-weight-bold" id="documentRequestModal{{ $documentRequest->document_request_id }}Label">{{ $documentRequest->documents->document_type }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                        <h5 class="modal-title font-weight-bold"
+                            id="documentRequestModal{{ $documentRequest->document_request_id }}Label">
+                            {{ $documentRequest->documents->document_type }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            onclick="closeModal()">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="word-wrap: break-word;">
                         <div class="row">
                             <div class="col-6">
                                 <p class="textLabel"><strong>Request Status:</strong> <span
@@ -150,16 +159,29 @@
                             </div>
                             <div class="col-6">
                                 <p class="textLabxel"><strong>Date & Time Requested:</strong>
-                                    {{ $documentRequest->created_at }}</p>
+                                    {{ $documentRequest->created_at ? \Carbon\Carbon::parse($documentRequest->created_at)->format('M d, Y h:i A') : '' }}
+                                </p>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-12">
                                 <p class="textLabel"><strong>Appointment Date and Time:</strong></p>
-                                <p>{{ $documentRequest->appointment_date_time ?: 'Not yet specified. This will be updated once your request is approved.' }}
-                                </p>
+                                @if ($documentRequest->appointment_date_time)
+                                    <p>
+                                        Kindly visit the office at the specified date and time:
+                                        <span class="status-approved">{{ \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') }}</span>.
+                                        If you are a current student at SFHS, please bring your learner's ID. For alumni,
+                                        any valid government IDs are accepted. In case you are unable to pickup the requested
+                                        documents personally and wish for an authorized representative to receive them,
+                                        please prepare an authorization letter along with three photocopies of your
+                                        learner's ID or valid IDs and any valid IDs from the authorized representative.
+                                    </p>
+                                @else
+                                    <p>Not yet specified. This will be updated once your request is approved.</p>
+                                @endif
                             </div>
+
                         </div>
                         <hr>
                         <div class="row">
@@ -170,33 +192,45 @@
                             <div class="col-6">
                                 @if ($documentRequest->id_picture)
                                     <p class="textLabel"><strong>Additional Requirements Uploaded:</strong></p>
-                                    <img src="data:image/png;base64,{{ base64_encode($documentRequest->id_picture) }}"
-                                        alt="Uploaded ID Picture" style="max-width: 100%;">
+                                    <a class="status-approved" style="font-weight: normal"
+                                        href="{{ asset($documentRequest->id_picture) }}" target="_blank">
+                                        {{ $documentRequest->id_picture }}
+                                    </a>
                                 @else
                                     <p class="textLabel"><strong>Additional Requirements Uploaded:</strong> None</p>
                                 @endif
-
                             </div>
                         </div>
+
                         @if ($documentRequest->request_status === 'Approved')
                             <hr>
                             <div class="row">
                                 <div class="col-12">
-                                    <form method="POST"
-                                        action="{{ route('document-request.uploadReceipt', $documentRequest) }}"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <p class="textLabel"><strong>Upload Acknowledgment Receipt:</strong></p>
-                                        <input type="file" name="acknowledgment_receipt" accept=".pdf, .jpg, .png"
-                                            required>
-                                        <button type="submit" class="btn btn-primary">Upload</button>
-                                    </form>
+                                    @if ($documentRequest->acknowledgment_receipt)
+                                        <p class="textLabel"><strong>Acknowledgment Receipt:</strong></p>
+                                        <a class="status-approved" style="font-weight: normal"
+                                            href="{{ asset($documentRequest->acknowledgment_receipt) }}" target="_blank">
+                                            {{ $documentRequest->acknowledgment_receipt }}
+                                        </a>
+                                    @else
+                                        <form method="POST"
+                                            action="{{ route('document-request.uploadReceipt', $documentRequest) }}"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <p class="textLabel"><strong>Upload Acknowledgment Receipt:</strong></p>
+                                            <input type="file" name="acknowledgment_receipt" accept=".pdf, .jpg, .png"
+                                                required>
+                                            <button type="submit" class="btn btn-primary">Upload</button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         @endif
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            onclick="closeModal()">Close</button>
                     </div>
                 </div>
             </div>

@@ -44,7 +44,6 @@
             </div>
 
             <div class="mb-4">
-                <a href="/logout" class="common-button primary-button">LOGOUT</a>
                 <a href="/document-request" class="common-button primary-button">Request a Document</a>
             </div>
         </div>

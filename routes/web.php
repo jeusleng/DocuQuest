@@ -62,3 +62,6 @@ Route::get('/admin/view-pending/{id}', [AdminController::class, 'editPending'])-
 Route::post('admin/edit-pending/{id}', [AdminController::class, 'updatePending'])->name('admin.update-pending');
 
 Route::get('/admin/approved', [AdminController::class, 'showApproved'])->name('admin.approved');
+
+Route::post('/document-request/upload-receipt/{documentRequest}', [DocumentRequestController::class, 'uploadReceipt'])
+    ->name('document-request.uploadReceipt');

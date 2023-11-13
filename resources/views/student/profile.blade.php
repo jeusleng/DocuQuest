@@ -201,7 +201,8 @@
                         </div>
 
                         <!-- Update Profile Button -->
-                        <button type="submit" class="common-button btn-primary btn-block">Update Profile</button>
+                        <button type="submit" class="common-button btn-primary btn-block">Update Profile</button><br>
+                        <a href="/logout" class="common-button secondary-button btn-block">Logout</a>
                     </form>
                 </div>
             </div>

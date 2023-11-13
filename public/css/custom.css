@@ -112,7 +112,8 @@ h4{
 .history-card{
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1) !important;
     border-radius: 10px;
-    width: 105%;
+    width: 110%;
+    margin-left: -50px;
 }
 
 .request-card {

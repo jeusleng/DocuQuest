@@ -294,9 +294,7 @@
     <label for="appointment_date_time">Appointment Date and Time</label>
     <input type="datetime-local" class="form-control"
         id="appointment_date_time" name="appointment_date_time"
-        value="{{ $documentRequest->appointment_date_time ? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i') : '' }}"
-        onchange="updateDateTimeFormat()"
-        {{ in_array(\Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('Y-m-d H:i'), $disabledTimes) ? 'disabled' : '' }}>
+        value="{{ $documentRequest->appointment_date_time ? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i') : '' }}">
 </div>
 
 </div>

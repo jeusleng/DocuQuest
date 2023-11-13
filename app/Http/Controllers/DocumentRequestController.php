@@ -184,4 +184,23 @@ class DocumentRequestController extends Controller
         return redirect()->route('document-request.history')->with('success', 'Document request updated successfully');
     }
 
+    public function uploadReceipt(Request $request, DocumentRequests $documentRequest)
+{
+    // Validate the uploaded file
+    $request->validate([
+        'acknowledgment_receipt' => 'required|mimes:pdf,jpg,png|max:2048',
+    ]);
+
+    // Store the uploaded receipt
+    $acknowledgmentReceipt = $request->file('acknowledgment_receipt');
+    $receiptPath = $acknowledgmentReceipt->store('acknowledgment_receipts', 'public');
+
+    // Update the document request with the receipt path
+    $documentRequest->update([
+        'acknowledgment_receipt' => $receiptPath,
+    ]);
+
+    return redirect()->back()->with('success', 'Acknowledgment receipt uploaded successfully!');
+}
+
 }

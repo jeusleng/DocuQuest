@@ -15,6 +15,7 @@ class DocumentRequests extends Model
         'document_id',
         'request_status',
         'number_of_copies',
+        'reason_declined',
         'purpose',
         'appointment_date_time',
         'acknowledgment_receipt',

@@ -21,6 +21,8 @@ class Users extends Model
         'contact_number',
         'complete_address',
         'grade_level',
+        'student_type',
+        'act_status',
         'section',
         'learner_reference_number',
         'graduation_year',

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SFHS Admin - Upcoming Appointments</title>
+    <title>SFHS Admin - Completed Requests</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -44,7 +44,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -54,34 +54,34 @@
             <hr class="sidebar-divider">
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            <li class="nav-item active">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Document Requests</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
                         <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
                         <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
-                        <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
+                        <a class="collapse-item active" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
                     </div>
                 </div>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Appointments</span>
                 </a>
-                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="{{ route('admin.upcoming') }}">Upcoming</a>
+                        <a class="collapse-item" href="{{ route('admin.upcoming') }}">Upcoming</a>
                         <a class="collapse-item" href="{{ route('admin.completed') }}">Completed</a>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-0 text-gray-800 text-center"
-                        style="color: #c53f3f !important; font-weight: bold;">Upcoming Appointments</h1><br>
+                        style="color: #c53f3f !important; font-weight: bold;">Completed Requests</h1><br>
 
                     <div class="row">
 
@@ -171,35 +171,44 @@
                             <div class="container signup-container">
                                 <div class="row justify-content-center">
                                     <div class="col-md-11">
-                                        <div class="card upcoming-card">
+                                        <div class="card completed-card">
                                             <div class="card-body">
                                                 <table class="table table-bordered text-center" id="approved-requests-table">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>Date</th>
-                                                            <th>Time</th>
+                                                            <th>Date Requested</th>
+                                                            <th>Date Completed</th>
                                                             <th>Student's Name</th>
                                                             <th>Document Requested</th>
-                                                            <th>Number of Copies</th>
+                                                            <th>Acknowledgement Receipt</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @php $counter = 1; @endphp
-                                                        @forelse ($upcomingAppointments as $request)
+                                                        @forelse ($completedRequests as $request)
                                                             <tr>
                                                                 <td>{{ $counter++ }}</td>
-                                                                <td>{{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('M d, Y') : 'Not yet specified' }}</td>
+                                                                <td>{{ $request->created_at ? \Carbon\Carbon::parse($request->created_at)->format('M d, Y h:i A') : '' }}</td>
                                                                 <td>
-                                                                    {{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('h:i A') : 'Not yet specified' }}
+                                                                    {{ $request->updated_at ? \Carbon\Carbon::parse($request->updated_at)->format('M d, Y h:i A') : '' }}
                                                                 </td>
                                                                 <td>{{ $request->users->first_name }} {{ $request->users->last_name }}</td>
                                                                 <td>{{ $request->documents->document_type }}</td>
-                                                                <td>{{ $request->number_of_copies }}</td>
+                                                                <td>
+                                                                    @if ($request->acknowledgment_receipt)
+                                                                        <a class="btn btn-primary" style="font-size: 12px"
+                                                                           href="{{ asset('storage/' . $request->acknowledgment_receipt) }}" target="_blank">
+                                                                            View Acknowledgment Receipt
+                                                                        </a>
+                                                                    @else
+                                                                        No acknowledgment receipt uploaded
+                                                                    @endif
+                                                                </td>
                                                             </tr>
                                                         @empty
                                                             <tr>
-                                                                <td colspan="10" class="text-center">No upcoming appointments yet.</td>
+                                                                <td colspan="10" class="text-center">No completed appointments yet.</td>
                                                             </tr>
                                                         @endforelse
                                                     </tbody>

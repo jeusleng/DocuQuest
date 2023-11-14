@@ -17,8 +17,10 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
+            $table->string('student_type');
             $table->date('date_of_birth');
             $table->string('gender');
+            $table->string('act_status')->default('Active');
             $table->string('contact_number')->nullable();
             $table->string('complete_address');
             $table->string('grade_level')->nullable();

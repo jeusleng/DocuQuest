@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Users;
 use Illuminate\Support\Facades\Auth; // Import the Auth facade
 use App\Models\DocumentRequests;
 use Illuminate\Http\Request;
@@ -249,12 +250,12 @@ class DocumentRequestController extends Controller
     }
 
     public function fetchExistingAppointments(Request $request)
-{
-    $selectedDatetime = $request->input('selectedDatetime');
+    {
+        $selectedDatetime = $request->input('selectedDatetime');
 
-    // Fetch existing appointments from the database based on $selectedDatetime
-    $existingAppointments = DocumentRequests::where('appointment_date_time', $selectedDatetime)->get();
+        // Fetch existing appointments from the database based on $selectedDatetime
+        $existingAppointments = DocumentRequests::where('appointment_date_time', $selectedDatetime)->get();
 
-    return response()->json($existingAppointments);
-}
+        return response()->json($existingAppointments);
+    }
 }

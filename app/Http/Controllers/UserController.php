@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    public function Login(Request $request){
+    public function Login(Request $request)
+    {
         $rules = [
             'email' => 'required',
             'password' => 'required',
@@ -28,42 +29,52 @@ class UserController extends Controller
             'password' => $request->password,
         ];
 
-        if(Auth::guard('users')->attempt($userCredentials)){
-            $user = Auth::guard('users')->user();
-            
-            session([
-                'user_id' => $user->user_id,
-                'type' => $user->type,
-                'email' => $user->email,
-                'first_name' => $user->first_name,
-                'middle_name' => $user->middle_name,
-                'last_name' => $user->last_name,
-                'date_of_birth' => $user->date_of_birth,
-                'gender' => $user->gender,
-                'contact_number' => $user->contact_number,
-                'complete_address' => $user->complete_address,
-                'grade_level' => $user->grade_level,
-                'section' => $user->section,
-                'learner_reference_number' => $user->learner_reference_number,
-                'graduation_year' => $user->graduation_year,
-                'last_grade_attended' => $user->last_grade_attended,
-                'adviser_name' => $user->adviser_name,
-                'adviser_section' => $user->adviser_section,
-                'guardian_full_name' => $user->guardian_full_name,
-                'guardian_contact_number' => $user->guardian_contact_number,
-            ]);
+        $authenticated = Auth::guard('users')->attempt($userCredentials);
 
-            if ($user->type === 'student') {
-                return redirect('/home');
-            } elseif ($user->type === 'admin') {
-                return redirect()->route('admin.dashboard');
+        if ($authenticated) {
+            $user = Auth::guard('users')->user();
+
+            if ($user->act_status === 'Active') {
+                session([
+                    'user_id' => $user->user_id,
+                    'type' => $user->type,
+                    'email' => $user->email,
+                    'first_name' => $user->first_name,
+                    'middle_name' => $user->middle_name,
+                    'last_name' => $user->last_name,
+                    'date_of_birth' => $user->date_of_birth,
+                    'gender' => $user->gender,
+                    'act_status' => $user->act_status,
+                    'student_type' => $user->student_type,
+                    'contact_number' => $user->contact_number,
+                    'complete_address' => $user->complete_address,
+                    'grade_level' => $user->grade_level,
+                    'section' => $user->section,
+                    'learner_reference_number' => $user->learner_reference_number,
+                    'graduation_year' => $user->graduation_year,
+                    'last_grade_attended' => $user->last_grade_attended,
+                    'adviser_name' => $user->adviser_name,
+                    'adviser_section' => $user->adviser_section,
+                    'guardian_full_name' => $user->guardian_full_name,
+                    'guardian_contact_number' => $user->guardian_contact_number,
+                ]);
+
+                if ($user->type === 'student') {
+                    return redirect('/home');
+                } elseif ($user->type === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                }
+            } else {
+                Auth::guard('users')->logout();
+                session()->flash('account-inactive');
+                return redirect('/');
             }
         }
-            session()->flash('invalid-login');
 
-            return redirect('/');
-        
+        session()->flash('invalid-login');
+        return redirect('/');
     }
+
 
     public function Register(Request $request){
         $rules = [
@@ -76,6 +87,8 @@ class UserController extends Controller
         'complete_address' => 'required|string',
         'grade_level' => 'nullable|string',
         'section' => 'nullable|string',
+        'student_type' => 'required|string',
+        'act_status' => 'required|string',
         'learner_reference_number' => 'nullable|string|size:12',
         'graduation_year' => 'nullable|string',
         'last_grade_attended' => 'nullable|string',
@@ -97,7 +110,9 @@ class UserController extends Controller
             'contact_number' => 'Contact Number',
             'complete_address' => 'Complete Address',
             'grade_level' => 'Grade Level',
+            'act_status' => 'Account Status',
             'section' => 'Section',
+            'student_type' => 'Student Type',
             'learner_reference_number' => 'LRN',
             'graduation_year' => 'Graduation Year',
             'last_grade_attended' => 'Last Grade Attended',
@@ -128,6 +143,7 @@ class UserController extends Controller
         $users->middle_name = $request->middle_name;
         $users->last_name = $request->last_name;
         $users->date_of_birth = $request->date_of_birth;
+        $users->act_status = $request->act_status;
         $users->gender = $request->gender;
         $users->contact_number = $request->contact_number;
         $users->complete_address = $request->complete_address;
@@ -137,6 +153,7 @@ class UserController extends Controller
         $users->graduation_year = $request->graduation_year;
         $users->last_grade_attended = $request->last_grade_attended;
         $users->adviser_name = $request->adviser_name;
+        $users->student_type = $request->student_type;
         $users->adviser_section = $request->adviser_section;
         $users->guardian_full_name = $request->guardian_full_name;
         $users->guardian_contact_number = $request->guardian_contact_number;
@@ -161,6 +178,8 @@ class UserController extends Controller
         session()->forget('complete_address');
         session()->forget('grade_level');
         session()->forget('section');
+        session()->forget('student_type');
+        session()->forget('act_status');
         session()->forget('learner_reference_number');
         session()->forget('graduation_year');
         session()->forget('last_grade_attended');
@@ -217,8 +236,10 @@ class UserController extends Controller
             $users->complete_address = '';
             $users->grade_level = '';
             $users->section = '';
+            $users->act_status = 'Active';
             $users->learner_reference_number = '';
             $users->graduation_year = '';
+            $users->student_type = '';
             $users->last_grade_attended = '';
             $users->adviser_name = '';
             $users->guardian_full_name = '';

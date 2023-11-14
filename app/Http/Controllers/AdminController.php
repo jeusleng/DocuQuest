@@ -40,7 +40,8 @@ class AdminController extends Controller
         $totalStudents = Users::where('type', 'student')->count();
         $totalApprovedRequests = DocumentRequests::where('request_status', 'approved')->count();
         $totalPendingRequests = DocumentRequests::where('request_status', 'pending')->count();
-
+        $totalCompletedRequests = DocumentRequests::where('request_status', 'completed')->count();
+        
         // Get the most requested document types and their counts
         $documentTypesData = DocumentRequests::join('documents', 'document_requests.document_id', '=', 'documents.document_id')
             ->select('documents.document_type', DB::raw('COUNT(*) as count'))
@@ -55,7 +56,7 @@ class AdminController extends Controller
 
         $colors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'];
 
-        return view('admin.dashboard', compact('totalStudents', 'totalApprovedRequests', 'totalPendingRequests', 'documentTypes', 'documentCounts', 'colors'));
+        return view('admin.dashboard', compact('totalStudents', 'totalCompletedRequests', 'totalApprovedRequests', 'totalPendingRequests', 'documentTypes', 'documentCounts', 'colors'));
     }
 
     public function showPending()
@@ -85,7 +86,7 @@ class AdminController extends Controller
         $request->validate([
             'request_status' => 'required|in:Pending,Approved,Declined',
             'appointment_date_time' => 'nullable|date_format:Y-m-d\TH:i',
-            'reason_declined' => 'required',
+            'reason_declined' => 'nullable',
         ]);
 
         // Find the DocumentRequest by ID
@@ -119,6 +120,18 @@ class AdminController extends Controller
         return view('admin.approved', compact('approvedRequests'));
     }
 
+    public function showDeclined()
+    {
+        if ($this->checkSession()) {
+            return $this->checkSession();
+        }
+
+        // Fetch declined document requests
+        $declinedRequests = DocumentRequests::where('request_status', 'Declined')->get();
+
+        return view('admin.declined', compact('declinedRequests'));
+    }
+
     public function showUpcoming()
     {
         if ($this->checkSession()) {
@@ -140,4 +153,60 @@ class AdminController extends Controller
 
         return view('admin.completed', compact('completedAppointments'));
     }
+
+    public function showCompletedReqs()
+    {
+        if ($this->checkSession()) {
+            return $this->checkSession();
+        }
+
+        $completedRequests = DocumentRequests::where('request_status', 'Completed')->get();
+
+        return view('admin.completed-reqs', compact('completedRequests'));
+    }
+
+    public function displayUsers(Request $request)
+    {
+        // Retrieve all users with type = "student" and student_type = "current"
+        $students = Users::where('type', 'student')->where('student_type', 'current')->get();
+
+        // Pass the $students variable to a view
+        return view('admin.display-users', ['students' => $students]);
+    }
+
+    public function displayAlumni(Request $request)
+    {
+        $students = Users::where('type', 'student')->where('student_type', 'alumni')->get();
+
+        // Pass the $students variable to a view
+        return view('admin.display-alumni', ['students' => $students]);
+    }
+
+    public function viewUser($userId)
+    {
+        // Retrieve the user information based on the provided $userId
+        $user = Users::findOrFail($userId);
+
+        // Pass the user data to the view
+        return view('admin.view-user', ['user' => $user]);
+    }
+
+    public function updateStatus(Request $request, $userId)
+    {
+        // Validate the form data
+        $request->validate([
+            'act_status' => 'required|in:Active,Inactive',
+        ]);
+
+        // Find the user by ID
+        $user = Users::findOrFail($userId);
+
+        // Update the status
+        $user->update(['act_status' => $request->input('act_status')]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'User status updated successfully!');
+    }
+
+
 }

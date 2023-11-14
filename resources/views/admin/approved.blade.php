@@ -64,8 +64,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
                         <a class="collapse-item active" href="{{ route('admin.approved') }}">Approved Requests</a>
-                        <a class="collapse-item" href="cards.html">Declined Requests</a>
-                        <a class="collapse-item" href="cards.html">Completed Requests</a>
+                        <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
+                        <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
                     </div>
                 </div>
             </li>
@@ -87,9 +87,18 @@
             </li>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+                    aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Users Management</span></a>
+                    <span>Users Management</span>
+                </a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.display-users') }}">Current Students</a>
+                        <a class="collapse-item" href="{{ route('admin.display-alumni') }}">Alumni</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->

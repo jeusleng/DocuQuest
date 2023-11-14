@@ -65,14 +65,31 @@
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
-                        <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
-                        <a class="collapse-item" href="cards.html">Declined Requests</a>
-                        <a class="collapse-item" href="cards.html">Completed Requests</a>
+                        @if ($documentRequest->request_status === 'Pending')
+                            <a class="collapse-item active" href="{{ route('admin.pending') }}">Pending Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
+                        @elseif ($documentRequest->request_status === 'Approved')    
+                            <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
+                            <a class="collapse-item active" href="{{ route('admin.approved') }}">Approved Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
+                        @elseif ($documentRequest->request_status === 'Declined') 
+                            <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
+                            <a class="collapse-item active" href="{{ route('admin.declined') }}">Declined Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
+                        @else
+                            <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
+                            <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
+                            <a class="collapse-item active" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
+                        @endif
                     </div>
                 </div>
             </li>
-
+           
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -90,9 +107,18 @@
             </li>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+                    aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Users Management</span></a>
+                    <span>Users Management</span>
+                </a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.display-users') }}">Current Students</a>
+                        <a class="collapse-item" href="{{ route('admin.display-alumni') }}">Alumni</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->
@@ -286,14 +312,16 @@
                                                         <div class="col-md-12 mb-3">
                                                             <label for="document_type">Acknowledgement Receipt</label>
                                                             @if ($documentRequest->acknowledgment_receipt)
-                                                                <input type="text" class="form-control"
-                                                                    id="document_type" name="document_type"
-                                                                    value="{{ $documentRequest->acknowledgment_receipt }}"
-                                                                    disabled>
+                                                            <a class="btn btn-primary"
+                                                            style="font-size: 12px; width:100%;"
+                                                            href="{{ asset('storage/' . $documentRequest->acknowledgment_receipt) }}"
+                                                            target="_blank">
+                                                            View Uploaded Acknowledgement Receipt
+                                                        </a>
                                                             @else
                                                                 <input type="text" class="form-control"
                                                                     id="document_type" name="document_type"
-                                                                    value="Student did not upload acknowledgment receipt yet."
+                                                                    value="The student has not yet uploaded the acknowledgment receipt."
                                                                     disabled>
                                                             @endif
                                                         </div>
@@ -337,11 +365,12 @@
                                                         </div>
 
                                                         <!-- Reason for Decline -->
-                                                        <div class="col-md-12 mb-3" id="declineReasonContainer"
-                                                            style="display: none;">
+                                                        <!-- Reason for Decline -->
+                                                        <div class="col-md-12 mb-3" id="declineReasonContainer" style="display: none;">
                                                             <label for="reason_declined">Reason for Decline</label>
-                                                            <textarea class="form-control" id="reason_declined" name="reason_declined"></textarea>
+                                                            <textarea class="form-control" id="reason_declined" name="reason_declined">{{ $documentRequest->reason_declined }}</textarea>
                                                         </div>
+
 
                                                         <script>
                                                             // Function to toggle the visibility of the appointment date and time picker and decline reason

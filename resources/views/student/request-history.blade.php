@@ -57,15 +57,16 @@
                                         <td class="tdClass">
                                             {{ $documentRequest->created_at ? \Carbon\Carbon::parse($documentRequest->created_at)->format('M d, Y h:i A') : '' }}
                                         </td>
-                                        <td
-                                            class="{{ $documentRequest->appointment_date_time == null ? 'status-pending' : 'status-approved' }}">
+                                        <td class="{{ ($documentRequest->request_status == 'Pending' ? 'status-pending' : ($documentRequest->request_status == 'Approved' ? 'status-approved' : ($documentRequest->request_status == 'Completed' ? 'status-completed' : 'status-declined'))) }}">
                                             {{ $documentRequest->appointment_date_time ? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') : 'Not yet specified' }}
                                         </td>
+                                        
+                                        
                                         <td class="{{ getStatusClass($documentRequest->request_status) }}">
                                             {{ $documentRequest->request_status }}
                                         </td>
                                         <td>
-                                            <div class="btn-toolbar">
+                                            <div class="btn-toolbar" style="margin-left:25px">
                                                 <div class="btn-group">
                                                     <form id="cancel-form-{{ $documentRequest->id }}" method="POST"
                                                         action="{{ route('document-request.cancel', $documentRequest) }}">
@@ -78,12 +79,17 @@
                                                     </form>
                                                 </div>
                                                 <div class="btn-group">
-                                                    @if ($documentRequest->request_status === 'Pending' || $documentRequest->request_status === 'Declined' || $documentRequest->request_status === 'Approved' || $documentRequest->request_status === 'Completed')
+                                                    @if ($documentRequest->request_status === 'Pending' || $documentRequest->request_status === 'Declined')
                                                         <button class="btn btn-primary blue-background" data-toggle="modal"
                                                             data-target="#documentRequestModal{{ $documentRequest->document_request_id }}"
                                                             onclick="openModal({{ $documentRequest->document_request_id }})">View</button>
+                                                    @elseif ($documentRequest->request_status === 'Approved' || $documentRequest->request_status === 'Completed')
+                                                        <button class="btn btn-primary blue-background" data-toggle="modal"
+                                                            data-target="#documentRequestModal{{ $documentRequest->document_request_id }}"
+                                                            onclick="openModal({{ $documentRequest->document_request_id }})" style="width: 200px; ">View</button>
                                                     @endif
                                                 </div>
+                                                
                                                 <div class="btn-group">
                                                     @if ($documentRequest->request_status === 'Pending' || $documentRequest->request_status === 'Declined')
                                                         <a class="btn btn-primary yellow-background"
@@ -168,7 +174,7 @@
                                 </p>
                             </div>
                             <div class="col-6">
-                                <p class="textLabxel"><strong>Date & Time Requested:</strong>
+                                <p class="textLabel"><strong>Date & Time Requested:</strong>
                                     {{ $documentRequest->created_at ? \Carbon\Carbon::parse($documentRequest->created_at)->format('M d, Y h:i A') : '' }}
                                 </p>
                             </div>
@@ -177,22 +183,27 @@
                         <div class="row">
                             <div class="col-12">
                                 <p class="textLabel"><strong>Appointment Date and Time:</strong></p>
-                                @if ($documentRequest->appointment_date_time)
-                                    <p>
-                                        Kindly visit the office at the specified date and time:
-                                        <span
-                                            class="status-approved">{{ \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') }}</span>.
-                                        If you are a current student at SFHS, please bring your learner's ID. For alumni,
-                                        any valid government IDs are accepted. In case you are unable to pickup the
-                                        requested
-                                        documents personally and wish for an authorized representative to receive them,
-                                        please prepare an authorization letter along with three photocopies of your
-                                        learner's ID or valid IDs and any valid IDs from the authorized representative.
-                                    </p>
+                            
+                                @if ($documentRequest->request_status === 'Completed')
+                                    <div class="alert alert-info" role="alert">
+                                        Your transaction has been successfully completed. We appreciate your engagement and look forward to serving you again in the future. 
+                                    </div>
+                                @elseif ($documentRequest->appointment_date_time)
+                                    <div class="alert alert-info" role="alert">
+                                        Kindly visit the office at the specified date and time: <span class="status-approved">{{ \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') }}</span>. If you are a current student at SFHS, please bring your learner's ID. For alumni, any valid government IDs are accepted. In case you are unable to pick up the requested documents personally and wish for an authorized representative to receive them, please prepare an authorization letter along with three photocopies of your learner's ID or valid IDs and any valid IDs from the authorized representative.
+                                    </div>
+                                @elseif ($documentRequest->request_status === 'Pending')
+                                    <div class="alert alert-warning" role="alert">
+                                        Not yet specified. This will be updated once your request is approved.
+                                    </div>
                                 @else
-                                    <p>Not yet specified. This will be updated once your request is approved.</p>
+                                    <div class="alert alert-danger" role="alert">
+                                        I regret to inform you that your request has been declined.<br>
+                                        <strong>Reason: {{ $documentRequest->reason_declined }}</strong> 
+                                    </div>
                                 @endif
                             </div>
+                            
 
                         </div>
                         <hr>
@@ -216,21 +227,25 @@
                             
                         </div>
 
-                        @if ($documentRequest->request_status === 'Approved')
+                        @if ($documentRequest->request_status === 'Approved' || $documentRequest->request_status === 'Completed')
                             <hr>
                             <div class="row">
                                 <div class="col-12">
                                     @if ($documentRequest->acknowledgment_receipt)
-                                        <p class="textLabel"><strong>Acknowledgment Receipt:</strong></p>
-                                        <a class="status-approved" style="font-weight: normal"
-                                            href="{{ asset($documentRequest->acknowledgment_receipt) }}" target="_blank">
-                                            {{ $documentRequest->acknowledgment_receipt }}
+                                    <div class="textLabel">
+                                        <strong>Acknowledgment Receipt:</strong>
+                                        <a class="btn btn-primary" style="font-size: 12px" href="{{ asset('storage/' . $documentRequest->acknowledgment_receipt) }}" target="_blank">
+                                            View Uploaded Acknowledgment Receipt
                                         </a>
+                                    </div>
                                     @else
                                         <form method="POST"
                                             action="{{ route('document-request.uploadReceipt', $documentRequest) }}"
                                             enctype="multipart/form-data">
                                             @csrf
+                                            <div class="alert alert-info" role="alert">
+                                                NOTE: Once you have received or picked up your requested document, upload here your acknowledgement receipt.
+                                            </div>
                                             <p class="textLabel"><strong>Upload Acknowledgment Receipt:</strong></p>
                                             <input type="file" name="acknowledgment_receipt" accept=".pdf, .jpg, .png"
                                                 required>

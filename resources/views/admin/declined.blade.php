@@ -9,16 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SFHS Admin - Upcoming Appointments</title>
+    <title>SFHS Admin - Declined Requests</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
 
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
 </head>
@@ -44,7 +43,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
@@ -54,34 +53,34 @@
             <hr class="sidebar-divider">
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            <li class="nav-item active">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Document Requests</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
                         <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
-                        <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
+                        <a class="collapse-item active" href="{{ route('admin.declined') }}">Declined Requests</a>
                         <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
                     </div>
                 </div>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Appointments</span>
                 </a>
-                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="{{ route('admin.upcoming') }}">Upcoming</a>
+                        <a class="collapse-item" href="{{ route('admin.upcoming') }}">Upcoming</a>
                         <a class="collapse-item" href="{{ route('admin.completed') }}">Completed</a>
                     </div>
                 </div>
@@ -161,7 +160,8 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-0 text-gray-800 text-center"
-                        style="color: #c53f3f !important; font-weight: bold;">Upcoming Appointments</h1><br>
+                        style="color: #c53f3f !important; font-weight: bold;">Declined
+                        Requests</h1><br>
 
                     <div class="row">
 
@@ -171,35 +171,50 @@
                             <div class="container signup-container">
                                 <div class="row justify-content-center">
                                     <div class="col-md-11">
-                                        <div class="card upcoming-card">
+                                        <div class="card declined-card">
                                             <div class="card-body">
-                                                <table class="table table-bordered text-center" id="approved-requests-table">
+                                                <table class="table table-bordered text-center"
+                                                    id="approved-requests-table">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>Date</th>
-                                                            <th>Time</th>
-                                                            <th>Student's Name</th>
-                                                            <th>Document Requested</th>
-                                                            <th>Number of Copies</th>
+                                                            <th>Name of Student</th>
+                                                            <th>Document Type</th>
+                                                            <th>Date Requested</th>
+                                                            <th>Status</th>
+                                                            <th>Reason of Decline</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @php $counter = 1; @endphp
-                                                        @forelse ($upcomingAppointments as $request)
+                                                        @forelse ($declinedRequests as $request)
                                                             <tr>
                                                                 <td>{{ $counter++ }}</td>
-                                                                <td>{{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('M d, Y') : 'Not yet specified' }}</td>
-                                                                <td>
-                                                                    {{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('h:i A') : 'Not yet specified' }}
-                                                                </td>
-                                                                <td>{{ $request->users->first_name }} {{ $request->users->last_name }}</td>
+                                                                <td>{{ $request->users->first_name }}
+                                                                    {{ $request->users->last_name }}</td>
                                                                 <td>{{ $request->documents->document_type }}</td>
-                                                                <td>{{ $request->number_of_copies }}</td>
+                                                                <td>{{ $request->created_at ? \Carbon\Carbon::parse($request->created_at)->format('M d, Y h:i A') : '' }}</td>
+                                                                <td class="status-declined">
+                                                                    {{ $request->request_status }}
+                                                                </td>
+                                                                <td style="word-wrap: break-word; max-width: 200px;">
+                                                                    {{ $request->reason_declined }}
+                                                                </td>
+                                                                
+                                                                <td>
+                                                                    <div class="btn-toolbar">
+                                                                        <div class="btn-group">
+                                                                            <a href="{{ route('admin.edit-pending', ['id' => $request->document_request_id]) }}"
+                                                                                class="btn btn-sm btn-primary blue-background">View</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
                                                             </tr>
                                                         @empty
                                                             <tr>
-                                                                <td colspan="10" class="text-center">No upcoming appointments yet.</td>
+                                                                <td colspan="7" class="text-center">No declined
+                                                                    requests yet.</td>
                                                             </tr>
                                                         @endforelse
                                                     </tbody>
@@ -209,8 +224,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            
 
 
 

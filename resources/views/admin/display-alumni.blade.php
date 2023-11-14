@@ -9,16 +9,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SFHS Admin - Upcoming Appointments</title>
-
-    <!-- Custom fonts for this template-->
+    <title>SFHS Admin - Alumni Users</title>
+    <!-- Custom fonts for this template -->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
 
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 
-    <!-- Custom styles for this template-->
+    <!-- Custom styles for this template -->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
 </head>
@@ -55,7 +53,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Document Requests</span>
@@ -72,32 +70,34 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-calendar"></i>
                     <span>Appointments</span>
                 </a>
-                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="{{ route('admin.upcoming') }}">Upcoming</a>
+                        <a class="collapse-item" href="{{ route('admin.upcoming') }}">Upcoming</a>
                         <a class="collapse-item" href="{{ route('admin.completed') }}">Completed</a>
                     </div>
                 </div>
             </li>
+
+
             <!-- Nav Item - Charts -->
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
                     aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users Management</span>
                 </a>
-                <div id="collapseUsers" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUsers" class="collapse show" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('admin.display-users') }}">Current Students</a>
-                        <a class="collapse-item" href="{{ route('admin.display-alumni') }}">Alumni</a>
+                        <a class="collapse-item active" href="{{ route('admin.display-alumni') }}">Alumni</a>
                     </div>
                 </div>
             </li>
@@ -161,7 +161,7 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-0 text-gray-800 text-center"
-                        style="color: #c53f3f !important; font-weight: bold;">Upcoming Appointments</h1><br>
+                        style="color: #c53f3f !important; font-weight: bold;">Alumni Users</h1><br>
 
                     <div class="row">
 
@@ -171,46 +171,63 @@
                             <div class="container signup-container">
                                 <div class="row justify-content-center">
                                     <div class="col-md-11">
-                                        <div class="card upcoming-card">
+                                        <div class="card alumni-card">
                                             <div class="card-body">
-                                                <table class="table table-bordered text-center" id="approved-requests-table">
+                                                <table class="table table-bordered text-center"
+                                                    id="approved-requests-table">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>Date</th>
-                                                            <th>Time</th>
-                                                            <th>Student's Name</th>
-                                                            <th>Document Requested</th>
-                                                            <th>Number of Copies</th>
+                                                            <th>Name</th>
+                                                            <th>User Type</th>
+                                                            <th>Year Graduated</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @php $counter = 1; @endphp
-                                                        @forelse ($upcomingAppointments as $request)
+                                                        @if($students->isEmpty())
                                                             <tr>
-                                                                <td>{{ $counter++ }}</td>
-                                                                <td>{{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('M d, Y') : 'Not yet specified' }}</td>
-                                                                <td>
-                                                                    {{ $request->appointment_date_time ? \Carbon\Carbon::parse($request->appointment_date_time)->format('h:i A') : 'Not yet specified' }}
-                                                                </td>
-                                                                <td>{{ $request->users->first_name }} {{ $request->users->last_name }}</td>
-                                                                <td>{{ $request->documents->document_type }}</td>
-                                                                <td>{{ $request->number_of_copies }}</td>
+                                                                <td colspan="10">There are currently no alumni users to display at the moment.</td>
                                                             </tr>
-                                                        @empty
-                                                            <tr>
-                                                                <td colspan="10" class="text-center">No upcoming appointments yet.</td>
-                                                            </tr>
-                                                        @endforelse
+                                                        @else
+                                                            @php $counter = 1; @endphp
+                                                            @foreach($students as $student)
+                                                                <tr>
+                                                                    <td>{{ $counter++ }}</td>
+                                                                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                                                    @if ($student->student_type === 'alumni')
+                                                                        <td>Alumni</td>
+                                                                    @endif
+                                                                    <td>{{ $student->graduation_year }}</td>
+                                                                    <td>
+                                                                        <form method="POST" action="{{ route('admin.update-status', ['userId' => $student->user_id]) }}">
+                                                                            @csrf
+                                                                            <select name="act_status" onchange="this.form.submit()">
+                                                                                <option value="Active" {{ $student->act_status === 'Active' ? 'selected' : '' }}>Active</option>
+                                                                                <option value="Inactive" {{ $student->act_status === 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                                                                            </select>
+                                                                        </form>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="btn-toolbar">
+                                                                            <div class="btn-group">
+                                                                                <a href=""
+                                                                                    class="btn btn-sm btn-primary blue-background">View</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        @endif
                                                     </tbody>
+                                                    
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            
 
 
 
@@ -261,7 +278,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Bootstrap core JavaScript from CDN -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -272,6 +288,7 @@
 
             <!-- Custom scripts for all pages -->
             <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
 
 </body>
 

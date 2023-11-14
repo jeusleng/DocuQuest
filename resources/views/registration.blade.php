@@ -32,7 +32,7 @@
                                     not
                                     apply to you, you may use "N/A."
                                 </div>
-
+                                <input type="text" name="act_status" id="act_status" value="Active" hidden>
                                 <!-- Personal Information -->
                                 <h5 class="category-label">Personal Information</h5>
                                 <div class="form-row">
@@ -125,120 +125,179 @@
                                 <!-- Academic Information -->
                                 <h5 class="category-label">Academic Information</h5>
 
-                                <!-- Current Student -->
-                                <h6 class="category-label">Current Student</h6>
+                                <!-- Student Type Dropdown -->
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="grade_level">Grade Level/Year</label>
-                                        <select class="form-control @error('grade_level') is-invalid @enderror"
-                                            id="grade_level" name="grade_level">
-                                            <option value="7" @if (old('grade_level') === '7') selected @endif>Grade
-                                                7
-                                            </option>
-                                            <option value="8" @if (old('grade_level') === '8') selected @endif>Grade
-                                                8
-                                            </option>
-                                            <option value="9" @if (old('grade_level') === '9') selected @endif>Grade
-                                                9
-                                            </option>
-                                            <option value="10" @if (old('grade_level') === '10') selected @endif>Grade
-                                                10
-                                            </option>
-                                            <option value="11" @if (old('grade_level') === '11') selected @endif>Grade
-                                                11
-                                            </option>
-                                            <option value="12" @if (old('grade_level') === '12') selected @endif>Grade
-                                                12
-                                            </option>
+                                    <div class="form-group col-md-6">
+                                        <label for="student_type">Student Type</label>
+                                        <select class="form-control @error('student_type') is-invalid @enderror"
+                                            id="student_type" name="student_type">
+                                            <option value="current" @if (old('student_type') === 'current') selected @endif>
+                                                Current Student</option>
+                                            <option value="alumni" @if (old('student_type') === 'alumni') selected @endif>
+                                                Alumni</option>
                                         </select>
-                                        @error('grade_level')
+                                        @error('student_type')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="section">Section/Strand</label>
-                                        <input type="text" class="form-control @error('section') is-invalid @enderror"
-                                            id="section" name="section" placeholder="Enter your section/strand"
-                                            value="{{ old('section') }}">
-                                        @error('section')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="learner_reference_number">Learner Reference Number (LRN)</label>
-                                        <input type="text"
-                                            class="form-control @error('learner_reference_number') is-invalid @enderror"
-                                            id="learner_reference_number" name="learner_reference_number"
-                                            placeholder="Enter your LRN" value="{{ old('learner_reference_number') }}">
-                                        @error('learner_reference_number')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                </div>
+
+                                <!-- Current Student -->
+                                <div class="current-student-fields">
+                                    <h6 class="category-label">Current Student</h6>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="grade_level">Grade Level/Year</label>
+                                            <select class="form-control @error('grade_level') is-invalid @enderror"
+                                                id="grade_level" name="grade_level">
+                                                <option value="7" @if (old('grade_level') === '7') selected @endif>
+                                                    Grade
+                                                    7
+                                                </option>
+                                                <option value="8" @if (old('grade_level') === '8') selected @endif>
+                                                    Grade
+                                                    8
+                                                </option>
+                                                <option value="9" @if (old('grade_level') === '9') selected @endif>
+                                                    Grade
+                                                    9
+                                                </option>
+                                                <option value="10" @if (old('grade_level') === '10') selected @endif>
+                                                    Grade
+                                                    10
+                                                </option>
+                                                <option value="11" @if (old('grade_level') === '11') selected @endif>
+                                                    Grade
+                                                    11
+                                                </option>
+                                                <option value="12" @if (old('grade_level') === '12') selected @endif>
+                                                    Grade
+                                                    12
+                                                </option>
+                                            </select>
+                                            @error('grade_level')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="section">Section/Strand</label>
+                                            <input type="text"
+                                                class="form-control @error('section') is-invalid @enderror"
+                                                id="section" name="section" placeholder="Enter your section/strand"
+                                                value="{{ old('section') }}">
+                                            @error('section')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="learner_reference_number">Learner Reference Number (LRN)</label>
+                                            <input type="text"
+                                                class="form-control @error('learner_reference_number') is-invalid @enderror"
+                                                id="learner_reference_number" name="learner_reference_number"
+                                                placeholder="Enter your LRN"
+                                                value="{{ old('learner_reference_number') }}">
+                                            @error('learner_reference_number')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
 
                                 <!-- Alumni -->
-                                <h6 class="category-label">Alumni</h6>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="graduation_year">Graduation Year</label>
-                                        <input type="text"
-                                            class="form-control @error('graduation_year') is-invalid @enderror"
-                                            id="graduation_year" name="graduation_year"
-                                            placeholder="Enter your graduation year"
-                                            value="{{ old('graduation_year') }}">
-                                        @error('graduation_year')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                <div class="alumni-fields">
+                                    <h6 class="category-label">Alumni</h6>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="graduation_year">Graduation Year</label>
+                                            <input type="text"
+                                                class="form-control @error('graduation_year') is-invalid @enderror"
+                                                id="graduation_year" name="graduation_year"
+                                                placeholder="Enter your graduation year"
+                                                value="{{ old('graduation_year') }}">
+                                            @error('graduation_year')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="last_grade_attended">Last Grade Attended</label>
+                                            <input type="text"
+                                                class="form-control @error('last_grade_attended') is-invalid @enderror"
+                                                id="last_grade_attended" name="last_grade_attended"
+                                                placeholder="Enter the last grade attended"
+                                                value="{{ old('last_grade_attended') }}">
+                                            @error('last_grade_attended')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="last_grade_attended">Last Grade Attended</label>
-                                        <input type="text"
-                                            class="form-control @error('last_grade_attended') is-invalid @enderror"
-                                            id="last_grade_attended" name="last_grade_attended"
-                                            placeholder="Enter the last grade attended"
-                                            value="{{ old('last_grade_attended') }}">
-                                        @error('last_grade_attended')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="adviser_name">Adviser's Name from the last year attended</label>
-                                        <input type="text"
-                                            class="form-control @error('adviser_name') is-invalid @enderror"
-                                            id="adviser_name" name="adviser_name" placeholder="Enter your adviser's name"
-                                            value="{{ old('adviser_name') }}">
-                                        @error('adviser_name')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="adviser_section">Section</label>
-                                        <input type="text"
-                                            class="form-control @error('adviser_section') is-invalid @enderror"
-                                            id="adviser_section" name="adviser_section" placeholder="Enter the section"
-                                            value="{{ old('adviser_section') }}">
-                                        @error('adviser_section')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="adviser_name">Adviser's Name from the last year attended</label>
+                                            <input type="text"
+                                                class="form-control @error('adviser_name') is-invalid @enderror"
+                                                id="adviser_name" name="adviser_name"
+                                                placeholder="Enter your adviser's name"
+                                                value="{{ old('adviser_name') }}">
+                                            @error('adviser_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="adviser_section">Section/Strand e.g.: GAS - Faith</label>
+                                            <input type="text"
+                                                class="form-control @error('adviser_section') is-invalid @enderror"
+                                                id="adviser_section" name="adviser_section"
+                                                placeholder="Enter the section" value="{{ old('adviser_section') }}">
+                                            @error('adviser_section')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
 
+                                <script>
+                                    // Add JavaScript to toggle visibility based on the selected student type
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const studentTypeDropdown = document.getElementById('student_type');
+                                        const currentStudentFields = document.querySelector('.current-student-fields');
+                                        const alumniFields = document.querySelector('.alumni-fields');
+                                
+                                        // Function to toggle visibility based on the selected student type
+                                        function toggleFieldsVisibility() {
+                                            const selectedType = studentTypeDropdown.value;
+                                
+                                            if (selectedType === 'current') {
+                                                currentStudentFields.style.display = 'block';
+                                                alumniFields.style.display = 'none';
+                                            } else if (selectedType === 'alumni') {
+                                                currentStudentFields.style.display = 'none';
+                                                alumniFields.style.display = 'block';
+                                            }
+                                        }
+                                
+                                        // Initial visibility setup
+                                        toggleFieldsVisibility();
+                                
+                                        // Add event listener to the dropdown change event
+                                        studentTypeDropdown.addEventListener('change', toggleFieldsVisibility);
+                                    });
+                                </script>
 
                                 <!-- Account Information -->
                                 <h5 class="category-label">Account Information</h5>

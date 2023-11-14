@@ -64,8 +64,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{{ route('admin.pending') }}">Pending Requests</a>
                         <a class="collapse-item" href="{{ route('admin.approved') }}">Approved Requests</a>
-                        <a class="collapse-item" href="cards.html">Declined Requests</a>
-                        <a class="collapse-item" href="cards.html">Completed Requests</a>
+                        <a class="collapse-item" href="{{ route('admin.declined') }}">Declined Requests</a>
+                        <a class="collapse-item" href="{{ route('admin.completed-reqs') }}">Completed Requests</a>
                     </div>
                 </div>
             </li>
@@ -85,13 +85,23 @@
                     </div>
                 </div>
             </li>
-            <!-- Nav Item - Charts -->
+
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers"
+                    aria-expanded="true" aria-controls="collapseUsers">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Users Management</span></a>
+                    <span>Users Management</span>
+                </a>
+                <div id="collapseUsers" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{{ route('admin.display-users') }}">Current Students</a>
+                        <a class="collapse-item" href="{{ route('admin.display-alumni') }}">Alumni</a>
+                    </div>
+                </div>
             </li>
 
+            
             {{-- <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
@@ -194,7 +204,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Completed Transactions</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalCompletedRequests }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-check-circle fa-2x text-gray-300"></i>

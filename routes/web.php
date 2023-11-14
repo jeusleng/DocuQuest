@@ -60,7 +60,10 @@ Route::get('/admin/pending', [AdminController::class, 'showPending'])->name('adm
 Route::get('/admin/view-pending/{id}', [AdminController::class, 'editPending'])->name('admin.edit-pending');
 Route::post('admin/edit-pending/{id}', [AdminController::class, 'updatePending'])->name('admin.update-pending');
 
+Route::get('/admin/declined', [AdminController::class, 'showDeclined'])->name('admin.declined');
+
 Route::get('/admin/approved', [AdminController::class, 'showApproved'])->name('admin.approved');
+Route::get('/admin/completed-reqs', [AdminController::class, 'showCompletedReqs'])->name('admin.completed-reqs');
 
 Route::post('/document-request/upload-receipt/{documentRequest}', [DocumentRequestController::class, 'uploadReceipt'])
     ->name('document-request.uploadReceipt');
@@ -72,3 +75,10 @@ Route::get('/acknowledgment-receipt/{documentRequest}', [DocumentRequestControll
 Route::get('/id-picture/{documentRequest}', [DocumentRequestController::class, 'viewIDPicture'])->name('viewIDPicture');
 
 Route::get('/fetch-existing-appointments', [DocumentRequestController::class, 'fetchExistingAppointments'])->name('fetchExistingAppointments');
+
+Route::get('/admin/display-users', [AdminController::class, 'displayUsers'])->name('admin.display-users');
+Route::get('/admin/display-alumni', [AdminController::class, 'displayAlumni'])->name('admin.display-alumni');
+
+Route::get('/admin/view-user{userId}', [AdminController::class, 'viewUser'])->name('admin.view-user');
+
+Route::post('/admin/update-status/{userId}', [AdminController::class, 'updateStatus'])->name('admin.update-status');

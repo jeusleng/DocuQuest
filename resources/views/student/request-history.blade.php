@@ -50,7 +50,7 @@
                             </thead>
                             <tbody>
                                 @php $counter = 1; @endphp
-                                @foreach ($documentRequests as $documentRequest)
+                                @forelse ($documentRequests as $documentRequest)
                                     <tr>
                                         <td class="tdClass">{{ $counter++ }}</td>
                                         <td class="tdClass">{{ $documentRequest->documents->document_type }}</td>
@@ -71,24 +71,34 @@
                                                         action="{{ route('document-request.cancel', $documentRequest) }}">
                                                         @csrf
                                                         @method('DELETE')
+                                                        @if ($documentRequest->request_status === 'Pending' || $documentRequest->request_status === 'Declined')
                                                         <button type="button" class="btn btn-primary red-background"
                                                             onclick="confirmCancellation(this)">Cancel</button>
+                                                            @endif
                                                     </form>
                                                 </div>
                                                 <div class="btn-group">
-                                                    <button class="btn btn-primary blue-background" data-toggle="modal"
-                                                        data-target="#documentRequestModal{{ $documentRequest->document_request_id }}"
-                                                        onclick="openModal({{ $documentRequest->document_request_id }})">View</button>
+                                                    @if ($documentRequest->request_status === 'Pending' || $documentRequest->request_status === 'Declined' || $documentRequest->request_status === 'Approved' || $documentRequest->request_status === 'Completed')
+                                                        <button class="btn btn-primary blue-background" data-toggle="modal"
+                                                            data-target="#documentRequestModal{{ $documentRequest->document_request_id }}"
+                                                            onclick="openModal({{ $documentRequest->document_request_id }})">View</button>
+                                                    @endif
                                                 </div>
                                                 <div class="btn-group">
-                                                    <a class="btn btn-primary yellow-background"
-                                                        href="{{ route('document-request.edit', $documentRequest) }}">Edit</a>
+                                                    @if ($documentRequest->request_status === 'Pending' || $documentRequest->request_status === 'Declined')
+                                                        <a class="btn btn-primary yellow-background"
+                                                            href="{{ route('document-request.edit', $documentRequest) }}">Edit</a>
+                                                    @endif
                                                 </div>
-
                                             </div>
                                         </td>
+                                        
                                     </tr>
-                                @endforeach
+                                    @empty
+                                    <tr>
+                                        <td colspan="10" style="color: var(--secondary-color);">No records to show in the request history at the moment.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -170,9 +180,11 @@
                                 @if ($documentRequest->appointment_date_time)
                                     <p>
                                         Kindly visit the office at the specified date and time:
-                                        <span class="status-approved">{{ \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') }}</span>.
+                                        <span
+                                            class="status-approved">{{ \Carbon\Carbon::parse($documentRequest->appointment_date_time)->format('M d, Y h:i A') }}</span>.
                                         If you are a current student at SFHS, please bring your learner's ID. For alumni,
-                                        any valid government IDs are accepted. In case you are unable to pickup the requested
+                                        any valid government IDs are accepted. In case you are unable to pickup the
+                                        requested
                                         documents personally and wish for an authorized representative to receive them,
                                         please prepare an authorization letter along with three photocopies of your
                                         learner's ID or valid IDs and any valid IDs from the authorized representative.
@@ -190,16 +202,18 @@
                                     {{ $documentRequest->number_of_copies }}</p>
                             </div>
                             <div class="col-6">
-                                @if ($documentRequest->id_picture)
-                                    <p class="textLabel"><strong>Additional Requirements Uploaded:</strong></p>
-                                    <a class="status-approved" style="font-weight: normal"
-                                        href="{{ asset($documentRequest->id_picture) }}" target="_blank">
-                                        {{ $documentRequest->id_picture }}
-                                    </a>
-                                @else
-                                    <p class="textLabel"><strong>Additional Requirements Uploaded:</strong> None</p>
-                                @endif
+                                <p class="textLabel"><strong>Additional Requirements Uploaded:</strong>
+                                    @if ($documentRequest->id_picture)
+                                        <a class="btn btn-primary" style="font-size: 12px" href="{{ asset('storage/' . $documentRequest->id_picture) }}" target="_blank">
+                                            View Uploaded ID Picture
+                                        </a>
+                                    @else
+                                        None
+                                    @endif
+                                </p>
                             </div>
+                            
+                            
                         </div>
 
                         @if ($documentRequest->request_status === 'Approved')

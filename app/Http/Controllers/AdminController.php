@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    private function checkSession(){
-        if(session()->missing('user_id')){
+    private function checkSession()
+    {
+        if (session()->missing('user_id')) {
             return redirect('/');
         }
     }
@@ -21,12 +22,12 @@ class AdminController extends Controller
         if ($this->checkSession()) {
             return $this->checkSession();
         }
-    
+
         // Redirect to login if not authenticated
         if (!auth()->check()) {
             return redirect('/');
         }
-    
+
         return view('admin.dashboard');
     }
 
@@ -51,7 +52,7 @@ class AdminController extends Controller
         // Extract data for the chart
         $documentTypes = $documentTypesData->pluck('document_type');
         $documentCounts = $documentTypesData->pluck('count');
-        
+
         $colors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'];
 
         return view('admin.dashboard', compact('totalStudents', 'totalApprovedRequests', 'totalPendingRequests', 'documentTypes', 'documentCounts', 'colors'));
@@ -62,7 +63,7 @@ class AdminController extends Controller
         if ($this->checkSession()) {
             return $this->checkSession();
         }
-        
+
         // Fetch pending document requests
         $pendingRequests = DocumentRequests::where('request_status', 'pending')->get();
 
@@ -84,11 +85,12 @@ class AdminController extends Controller
         $request->validate([
             'request_status' => 'required|in:Pending,Approved,Declined',
             'appointment_date_time' => 'nullable|date_format:Y-m-d\TH:i',
+            'reason_declined' => 'required',
         ]);
 
         // Find the DocumentRequest by ID
         $documentRequest = DocumentRequests::findOrFail($id);
-        
+
         // Convert the input datetime to a Carbon instance for proper handling
         $appointmentDateTime = $request->input('appointment_date_time')
             ? Carbon::parse($request->input('appointment_date_time'))
@@ -98,6 +100,7 @@ class AdminController extends Controller
         $documentRequest->update([
             'request_status' => $request->input('request_status'),
             'appointment_date_time' => $appointmentDateTime,
+            'reason_declined' => $request->input('reason_declined'),
         ]);
 
         // Redirect back with a success message
@@ -109,7 +112,7 @@ class AdminController extends Controller
         if ($this->checkSession()) {
             return $this->checkSession();
         }
-        
+
         // Fetch approved document requests
         $approvedRequests = DocumentRequests::where('request_status', 'Approved')->get();
 
@@ -121,7 +124,7 @@ class AdminController extends Controller
         if ($this->checkSession()) {
             return $this->checkSession();
         }
-        
+
         $upcomingAppointments = DocumentRequests::where('request_status', 'Approved')->get();
 
         return view('admin.upcoming', compact('upcomingAppointments'));
@@ -131,8 +134,8 @@ class AdminController extends Controller
     {
         if ($this->checkSession()) {
             return $this->checkSession();
-        }   
-        
+        }
+
         $completedAppointments = DocumentRequests::where('request_status', 'Completed')->get();
 
         return view('admin.completed', compact('completedAppointments'));

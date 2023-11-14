@@ -58,11 +58,11 @@ class UserController extends Controller
             } elseif ($user->type === 'admin') {
                 return redirect()->route('admin.dashboard');
             }
-        }else{
+        }
             session()->flash('invalid-login');
 
             return redirect('/');
-        }
+        
     }
 
     public function Register(Request $request){
@@ -202,26 +202,31 @@ class UserController extends Controller
     }
 
     public function generateAdmin(){
-        $users = new Users();
-        $users->type = 'admin';
-        $users->email = 'sfhs-admin@gmail.com';
-        $users->first_name = '';
-        $users->middle_name = '';
-        $users->last_name = '';
-        $users->date_of_birth = '2002-10-10';
-        $users->gender = '';
-        $users->complete_address = '';
-        $users->grade_level = '';
-        $users->section = '';
-        $users->learner_reference_number = '';
-        $users->graduation_year = '';
-        $users->last_grade_attended = '';
-        $users->adviser_name = '';
-        $users->guardian_full_name = '';
-        $users->guardian_contact_number = '';
-        $users->profile_picture = '';
-        $users->password = bcrypt('.2e1(]XTXB3~');
-        $users->save();
+
+        $adminExists = Users::where('email', 'sfhs-admin@gmail.com')->exists();
+
+        if (!$adminExists) {
+            $users = new Users();
+            $users->type = 'admin';
+            $users->email = 'sfhs-admin@gmail.com';
+            $users->first_name = '';
+            $users->middle_name = '';
+            $users->last_name = '';
+            $users->date_of_birth = '2002-10-10';
+            $users->gender = '';
+            $users->complete_address = '';
+            $users->grade_level = '';
+            $users->section = '';
+            $users->learner_reference_number = '';
+            $users->graduation_year = '';
+            $users->last_grade_attended = '';
+            $users->adviser_name = '';
+            $users->guardian_full_name = '';
+            $users->guardian_contact_number = '';
+            $users->profile_picture = '';
+            $users->password = bcrypt('.2e1(]XTXB3~');
+            $users->save();
+        }
 
         return redirect('/');
     }

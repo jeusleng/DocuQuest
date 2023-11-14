@@ -188,7 +188,7 @@
                                                                 <td>{{ $request->documents->document_type }}</td>
                                                                 <td>
                                                                     @if ($request->acknowledgment_receipt)
-                                                                        <a class="status-approved" style="font-weight: normal; word-break: break-all;"
+                                                                        <a class="btn btn-primary" style="font-size: 12px"
                                                                            href="{{ asset('storage/' . $request->acknowledgment_receipt) }}" target="_blank">
                                                                             View Acknowledgment Receipt
                                                                         </a>
@@ -196,10 +196,6 @@
                                                                         No acknowledgment receipt uploaded
                                                                     @endif
                                                                 </td>
-                                                                
-                                                                
-                                                                
-                                                                
                                                             </tr>
                                                         @empty
                                                             <tr>

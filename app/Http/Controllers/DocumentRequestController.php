@@ -16,8 +16,9 @@ class DocumentRequestController extends Controller
 {
     public $timestamps = false;
 
-    private function checkSession(){
-        if(session()->missing('user_id')){
+    private function checkSession()
+    {
+        if (session()->missing('user_id')) {
             return redirect('/');
         }
     }
@@ -71,42 +72,43 @@ class DocumentRequestController extends Controller
                 'Reimbursement of Education Expenses',
             ],
         ];
-        
+
         return view('student.document-request', compact('documents', 'purposes'));
     }
 
     public function storeRequest(Request $request)
-{
-    $request->validate([
-        'user_id' => 'required|integer',
-        'document_id' => 'required|integer',
-        'number_of_copies' => 'required|integer',
-        'purpose' => 'required|string',
-        'id_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate and restrict file types
-    ]);
+    {
+        $request->validate([
+            'user_id' => 'required|integer',
+            'document_id' => 'required|integer',
+            'number_of_copies' => 'required|integer',
+            'purpose' => 'required|string',
+            'id_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate and restrict file types
+        ]);
 
-    // Handle the uploaded image file
-    if ($request->hasFile('id_picture')) {
-        $file = $request->file('id_picture');
-        $path = $file->store('id_pictures'); // Store the file in the 'id_pictures' directory
-    } else {
-        $path = null; // No file was uploaded
+        // Handle the uploaded image file
+        if ($request->id_picture) {
+            // Delete the existing acknowledgment receipt file
+            Storage::delete($request->id_picture);
+        }
+
+        $ID_pic = $request->file('id_picture');
+        $ID_path = $ID_pic->store('id_pictures', 'public');
+
+        // Create a new document request using the value from the hidden input
+        $requestData = [
+            'user_id' => $request->user_id,
+            'document_id' => $request->document_id,
+            'number_of_copies' => $request->number_of_copies,
+            'purpose' => $request->purpose,
+            'id_picture' => $ID_path, // Store the file path in the database
+            'created_at' => $request->input('created_at'), // Use the value from the hidden input
+        ];
+
+        DocumentRequests::create($requestData);
+
+        return redirect()->route('document-request.history')->with('success', 'Document request submitted successfully');
     }
-
-    // Create a new document request using the value from the hidden input
-    $requestData = [
-        'user_id' => $request->user_id,
-        'document_id' => $request->document_id,
-        'number_of_copies' => $request->number_of_copies,
-        'purpose' => $request->purpose,
-        'id_picture' => $path, // Store the file path in the database
-        'created_at' => $request->input('created_at'), // Use the value from the hidden input
-    ];
-
-    DocumentRequests::create($requestData);
-
-    return redirect()->route('document-request.history')->with('success', 'Document request submitted successfully');
-}
 
 
 
@@ -175,54 +177,84 @@ class DocumentRequestController extends Controller
     }
 
     public function update(Request $request, DocumentRequests $documentRequest)
-    {
-        $request->validate([
-            'document_id' => 'required', // Make sure this matches the column name
-            'number_of_copies' => 'required|integer',
-            'purpose' => 'required',
-        ]);
+{
+    $request->validate([
+        'document_id' => 'required',
+        'number_of_copies' => 'required|integer',
+        'purpose' => 'required',
+        // 'new_id_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        $documentRequest->update([
-            'document_id' => $request->document_id,
-            'number_of_copies' => $request->number_of_copies,
-            'purpose' => $request->purpose,
-        ]);
+    // Delete the existing ID picture file
+    // if ($documentRequest->id_picture) {
+    //     Storage::delete($documentRequest->id_picture);
+    // }
 
-        return redirect()->route('document-request.history')->with('success', 'Document request updated successfully');
-    }
+    // if ($request->hasFile('new_id_picture')) {
+    //     $newIDPic = $request->file('new_id_picture');
+    //     $newIDPath = $newIDPic->store('id_pictures', 'public');
+
+    //     $documentRequest->update([
+    //         'id_picture' => $newIDPath,
+    //     ]);
+    // }
+
+    $documentRequest->update([
+        'document_id' => $request->document_id,
+        'number_of_copies' => $request->number_of_copies,
+        'purpose' => $request->purpose,
+    ]);
+
+    return redirect()->route('document-request.history')->with('success', 'Document request updated successfully');
+}
+
 
     public function uploadReceipt(Request $request, DocumentRequests $documentRequest)
-{
-    // Validate the uploaded file
-    $request->validate([
-        'acknowledgment_receipt' => 'required|mimes:pdf,jpg,png|max:2048',
-    ]);
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'acknowledgment_receipt' => 'required|mimes:pdf,jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    // Check if the document request already has an acknowledgment receipt
-    if ($documentRequest->acknowledgment_receipt) {
-        // Delete the existing acknowledgment receipt file
-        Storage::delete($documentRequest->acknowledgment_receipt);
+        // Check if the document request already has an acknowledgment receipt
+        if ($documentRequest->acknowledgment_receipt) {
+            // Delete the existing acknowledgment receipt file
+            Storage::delete($documentRequest->acknowledgment_receipt);
+        }
+
+        // Store the newly uploaded acknowledgment receipt
+        $acknowledgmentReceipt = $request->file('acknowledgment_receipt');
+        $receiptPath = $acknowledgmentReceipt->store('acknowledgment_receipts', 'public');
+
+        // Update the document request with the new receipt path and set the status to "Completed"
+        $documentRequest->update([
+            'acknowledgment_receipt' => $receiptPath,
+            'request_status' => 'Completed',
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Acknowledgment receipt uploaded successfully!');
     }
 
-    // Store the newly uploaded acknowledgment receipt
-    $acknowledgmentReceipt = $request->file('acknowledgment_receipt');
-    $receiptPath = $acknowledgmentReceipt->store('acknowledgment_receipts', 'public');
+    public function viewAcknowledgmentReceipt(DocumentRequests $documentRequest)
+    {
+        return response($documentRequest->acknowledgment_receipt)
+            ->header('Content-Type', 'pdf,jpeg,png,jpg,gif'); // Adjust the Content-Type based on your actual image type
+    }
 
-    // Update the document request with the new receipt path and set the status to "Completed"
-    $documentRequest->update([
-        'acknowledgment_receipt' => $receiptPath,
-        'request_status' => 'Completed',
-        'updated_at' => now(),
-    ]);
+    public function viewIDPicture(DocumentRequests $documentRequest)
+    {
+        return response($documentRequest->id_picture)
+            ->header('Content-Type', 'jpeg,png,jpg,gif'); // Adjust the Content-Type based on your actual image type
+    }
 
-    return redirect()->back()->with('success', 'Acknowledgment receipt uploaded successfully!');
-}
-
-public function viewAcknowledgmentReceipt(DocumentRequests $documentRequest)
+    public function fetchExistingAppointments(Request $request)
 {
-    return response($documentRequest->acknowledgment_receipt)
-        ->header('Content-Type', 'pdf,jpg,png'); // Adjust the Content-Type based on your actual image type
+    $selectedDatetime = $request->input('selectedDatetime');
+
+    // Fetch existing appointments from the database based on $selectedDatetime
+    $existingAppointments = DocumentRequests::where('appointment_date_time', $selectedDatetime)->get();
+
+    return response()->json($existingAppointments);
 }
-
-
 }

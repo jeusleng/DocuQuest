@@ -75,6 +75,24 @@
                                         </select>
                                     </div>
                                 </div>
+                                {{-- <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="id_picture">Uploaded Learner's ID Picture</label>
+                                        <div class="input-group">
+                                            @if ($documentRequest->id_picture)
+                                                <a class="btn btn-primary" style="font-size: 12px; width:100%" href="{{ asset('storage/' . $documentRequest->id_picture) }}" target="_blank">
+                                                    View Uploaded ID Picture
+                                                </a>
+                                            @else
+                                                <input type="text" class="form-control" value="No ID picture uploaded" readonly>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="new_id_picture">New Learner's ID Picture</label>
+                                        <input class="form-control" type="file" name="new_id_picture" id="new_id_picture" accept="image/*">
+                                    </div>
+                                </div> --}}
                             <div class="alert alert-info" role="alert">
                                 Your data is treated with confidentiality and is protected under the Data Privacy Act of
                                 2012 (RA No. 10173).

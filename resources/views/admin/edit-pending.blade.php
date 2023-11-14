@@ -261,11 +261,22 @@
                                                         <div class="col-md-6 mb-3">
                                                             <label for="additional_requirements">Additional
                                                                 Requirements</label>
-                                                            <input type="text" class="form-control"
-                                                                id="additional_requirements"
-                                                                name="additional_requirements"
-                                                                value="{{ $documentRequest->id_picture }}" disabled>
+                                                            @if ($documentRequest->id_picture)
+                                                                <div>
+                                                                    <a class="btn btn-primary"
+                                                                        style="font-size: 12px; width:100%;"
+                                                                        href="{{ asset('storage/' . $documentRequest->id_picture) }}"
+                                                                        target="_blank">
+                                                                        View Uploaded ID Picture
+                                                                    </a>
+                                                                </div>
+                                                            @else
+                                                                <div>
+                                                                    None
+                                                                </div>
+                                                            @endif
                                                         </div>
+
                                                     </div>
                                                     <br>
 
@@ -293,12 +304,13 @@
                                                     <br>
                                                     <h5 class="category-label">Action</h5>
                                                     <div class="row">
-                                                        <!-- Request Status, Appointment Date, and Appointment Time -->
+                                                        <!-- Request Status -->
                                                         <div class="col-md-6 mb-3">
                                                             <label for="request_status">Request Status</label>
                                                             <!-- Custom-styled Dropdown for Request Status -->
                                                             <select class="form-select form-control"
-                                                                id="request_status" name="request_status">
+                                                                id="request_status" name="request_status"
+                                                                onchange="toggleFields()">
                                                                 <option value="Pending"
                                                                     style="color: rgb(255, 157, 0);"
                                                                     {{ $documentRequest->request_status == 'Pending' ? 'selected' : '' }}>
@@ -312,10 +324,10 @@
                                                                     {{ $documentRequest->request_status == 'Declined' ? 'selected' : '' }}>
                                                                     Declined</option>
                                                             </select>
-
                                                         </div>
+
                                                         <!-- Appointment Date and Time -->
-                                                        <div class="col-md-6 mb-3">
+                                                        <div class="col-md-6 mb-3" id="appointmentDateTimeContainer">
                                                             <label for="appointment_date_time">Appointment Date and
                                                                 Time</label>
                                                             <input type="datetime-local" class="form-control"
@@ -323,6 +335,39 @@
                                                                 name="appointment_date_time"
                                                                 value="{{ $documentRequest->appointment_date_time? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i'): '' }}">
                                                         </div>
+
+                                                        <!-- Reason for Decline -->
+                                                        <div class="col-md-12 mb-3" id="declineReasonContainer"
+                                                            style="display: none;">
+                                                            <label for="reason_declined">Reason for Decline</label>
+                                                            <textarea class="form-control" id="reason_declined" name="reason_declined"></textarea>
+                                                        </div>
+
+                                                        <script>
+                                                            // Function to toggle the visibility of the appointment date and time picker and decline reason
+                                                            function toggleFields() {
+                                                                const requestStatus = document.getElementById('request_status').value;
+                                                                const appointmentDateTimeContainer = document.getElementById('appointmentDateTimeContainer');
+                                                                const declineReasonContainer = document.getElementById('declineReasonContainer');
+
+                                                                // Show the appointment date and time picker only if the status is "Approved"
+                                                                if (requestStatus === 'Approved') {
+                                                                    appointmentDateTimeContainer.style.display = 'block';
+                                                                    declineReasonContainer.style.display = 'none';
+                                                                } else if (requestStatus === 'Declined') {
+                                                                    appointmentDateTimeContainer.style.display = 'none';
+                                                                    declineReasonContainer.style.display = 'block';
+                                                                } else {
+                                                                    appointmentDateTimeContainer.style.display = 'none';
+                                                                    declineReasonContainer.style.display = 'none';
+                                                                }
+                                                            }
+
+                                                            // Initial call to set the initial visibility based on the current status
+                                                            toggleFields();
+                                                        </script>
+
+
 
                                                     </div>
 

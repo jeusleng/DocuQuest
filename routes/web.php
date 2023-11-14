@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 */
 
 //UNCOMMENT TO GENERATE ADMIN
-// USERNAME - ADMIN, PASSWORD - ADMIN
 // CAN CHANGE DEFAULT USERNAME AND PASSWORD ON USERCONTROLLER GENERATEADMIN FUNCTION
 Route::get('/generate', [UserController::Class, 'generateAdmin']);
 
@@ -53,7 +52,7 @@ Route::put('/profile/update', [ProfileController::class, 'update'])->name('profi
 // Route::get('/profile', 'ProfileController@index')->name('profile.index');
 // Route::put('/profile/update', 'ProfileController@update')->name('profile.update');
 
-Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('auth:users', 'admin');
 Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
 
 Route::get('/admin/pending', [AdminController::class, 'showPending'])->name('admin.pending');
@@ -70,3 +69,6 @@ Route::get('/admin/upcoming', [AdminController::class, 'showUpcoming'])->name('a
 Route::get('/admin/completed', [AdminController::class, 'showCompleted'])->name('admin.completed');
 
 Route::get('/acknowledgment-receipt/{documentRequest}', [DocumentRequestController::class, 'viewAcknowledgmentReceipt'])->name('viewAcknowledgmentReceipt');
+Route::get('/id-picture/{documentRequest}', [DocumentRequestController::class, 'viewIDPicture'])->name('viewIDPicture');
+
+Route::get('/fetch-existing-appointments', [DocumentRequestController::class, 'fetchExistingAppointments'])->name('fetchExistingAppointments');

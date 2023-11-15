@@ -66,7 +66,7 @@ class UserController extends Controller
                 }
             } else {
                 Auth::guard('users')->logout();
-                session()->flash('account-inactive');
+                session(['act-status-inactive' => true]);
                 return redirect('/');
             }
         }

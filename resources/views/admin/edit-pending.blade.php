@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,8 +22,39 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-</head>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEX/ndQFiq5ti6TwB/T5z9I2nY4BoF+YJyICJ"
+            crossorigin="anonymous"></script>
 
+    <!-- Include Bootstrap core JavaScript from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Include Vendor scripts -->
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+    <!-- Custom scripts for all pages -->
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+    <script>
+        // Function to format the datetime input based on the selected AM/PM
+        function updateDateTimeFormat() {
+            const datetimeInput = document.getElementById('appointment_date_time');
+            const selectedDatetime = datetimeInput.value;
+    
+            if (selectedDatetime) {
+                const datetimeComponents = selectedDatetime.split('T');
+                const date = datetimeComponents[0];
+                const time = datetimeComponents[1].substring(0, 5);
+    
+                datetimeInput.value = `${date}T${time}`;
+            }
+        }
+    
+    </script>
+</head>
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -354,15 +384,12 @@
                                                             </select>
                                                         </div>
 
-                                                        <!-- Appointment Date and Time -->
                                                         <div class="col-md-6 mb-3" id="appointmentDateTimeContainer">
-                                                            <label for="appointment_date_time">Appointment Date and
-                                                                Time</label>
-                                                            <input type="datetime-local" class="form-control"
-                                                                id="appointment_date_time"
-                                                                name="appointment_date_time"
-                                                                value="{{ $documentRequest->appointment_date_time? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i'): '' }}">
+                                                            <label for="appointment_date_time">Appointment Date and Time</label>
+                                                            <input type="datetime-local" class="form-control" id="appointment_date_time" name="appointment_date_time"
+                                                                   value="{{ $documentRequest->appointment_date_time ? \Carbon\Carbon::parse($documentRequest->appointment_date_time)->timezone('UTC')->format('Y-m-d\TH:i') : '' }}">
                                                         </div>
+                                                        
 
                                                         <!-- Reason for Decline -->
                                                         <!-- Reason for Decline -->

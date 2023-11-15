@@ -7,6 +7,10 @@ use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade as PDF;
+use ConsoleTVs\Charts\Facades\Charts;
+
 
 class AdminController extends Controller
 {
@@ -47,7 +51,7 @@ class AdminController extends Controller
             ->select('documents.document_type', DB::raw('COUNT(*) as count'))
             ->groupBy('documents.document_type')
             ->orderByDesc('count')
-            ->limit(5) // Adjust the limit as needed
+            ->limit(7) 
             ->get();
 
         // Extract data for the chart
@@ -56,7 +60,21 @@ class AdminController extends Controller
 
         $colors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'];
 
-        return view('admin.dashboard', compact('totalStudents', 'totalCompletedRequests', 'totalApprovedRequests', 'totalPendingRequests', 'documentTypes', 'documentCounts', 'colors'));
+        // Get monthly request data
+    $monthlyRequestData = DocumentRequests::select(
+        DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+        DB::raw('COUNT(*) as count')
+    )
+        ->groupBy('month')
+        ->orderBy('month') // Sort in ascending order
+        ->get();
+
+    // Extract data for the chart
+    $months = $monthlyRequestData->pluck('month');
+    $requestsPerMonth = $monthlyRequestData->pluck('count');
+
+    return view('admin.dashboard', compact('totalStudents', 'totalCompletedRequests', 'totalApprovedRequests', 'totalPendingRequests', 'documentTypes', 'documentCounts', 'colors', 'months', 'requestsPerMonth'));
+
     }
 
     public function showPending()
@@ -71,14 +89,22 @@ class AdminController extends Controller
         return view('admin.pending', compact('pendingRequests'));
     }
 
-    public function editPending($id)
-    {
-        // Fetch the necessary data for the view
-        $documentRequest = DocumentRequests::findOrFail($id);
-        $student = Users::findOrFail($documentRequest->user_id); // Assuming user_id is the foreign key for students
+    public function checkAppointmentAvailability($date, $time)
+{
+    $appointmentExists = DocumentRequests::where('appointment_date_time', $date . ' ' . $time)->where('request_status', 'Pending')->exists();
+    return !$appointmentExists; // Return true if appointment is available, false if not
+}
 
-        return view('admin.edit-pending', compact('documentRequest', 'student'));
-    }
+
+    public function editPending($id)
+{
+    $documentRequest = DocumentRequests::findOrFail($id);
+    $student = Users::findOrFail($documentRequest->user_id);
+
+    return view('admin.edit-pending', compact('documentRequest', 'student'));
+}
+
+
 
     public function updatePending(Request $request, $id)
     {
@@ -88,6 +114,31 @@ class AdminController extends Controller
             'appointment_date_time' => 'nullable|date_format:Y-m-d\TH:i',
             'reason_declined' => 'nullable',
         ]);
+        
+        // Check if the selected date and time are available
+        if ($request->input('appointment_date_time')) {
+            $existingAppointments = DocumentRequests::where('user_id', $request->user_id)
+                ->where('document_request_id', '<>', $id)
+                ->pluck('appointment_date_time')
+                ->toArray();
+        
+            if (in_array($request->input('appointment_date_time'), $existingAppointments)) {
+                return redirect()->back()->with('error', 'The selected date and time are not available.');
+            }
+        }
+        
+        $existingAppointments = DocumentRequests::where('user_id', $request->user_id)
+    ->where('document_request_id', '<>', $id)
+    ->pluck('appointment_date_time')
+    ->toArray();
+
+// Check if the selected date and time are available
+if (in_array($request->input('appointment_date_time'), $existingAppointments)) {
+    return redirect()->back()->with('error', 'The selected date and time are not available.');
+}
+
+
+        
 
         // Find the DocumentRequest by ID
         $documentRequest = DocumentRequests::findOrFail($id);
@@ -208,5 +259,42 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'User status updated successfully!');
     }
 
+    public function generateReports()
+{
+    // Documents requested by students
+    $documentsRequested = DB::table('document_requests')
+        ->join('documents', 'document_requests.document_id', '=', 'documents.document_id')
+        ->join('users', 'document_requests.user_id', '=', 'users.user_id')
+        ->select('documents.document_type', 'document_requests.number_of_copies', 'users.first_name', 'users.last_name', 'document_requests.purpose', 'document_requests.created_at', 'document_requests.updated_at')
+        ->get();
+
+    // Months when students requested documents
+    $monthsRequested = DB::table('document_requests')
+        ->select(DB::raw('DATE_FORMAT(created_at, "%M") as month'), DB::raw('COUNT(*) as request_count'))
+        ->groupBy('month')
+        ->orderBy('month') // Order by month
+        ->get();
+
+    // Name of students with requested documents
+    $studentsWithDocuments = DB::table('document_requests')
+        ->join('users', 'document_requests.user_id', '=', 'users.user_id')
+        ->select('users.first_name', 'users.last_name', 'users.student_type')
+        ->distinct()
+        ->get();
+
+    // Documents and their request counts
+    $documentRequestCounts = DB::table('document_requests')
+        ->join('documents', 'document_requests.document_id', '=', 'documents.document_id')
+        ->select('documents.document_type', DB::raw('COUNT(*) as request_count'))
+        ->groupBy('documents.document_type')
+        ->orderByDesc('request_count')
+        ->get();    
+
+    // PDF generation
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.reports', compact('documentsRequested', 'monthsRequested', 'studentsWithDocuments', 'documentRequestCounts'));
+
+    // Download the PDF
+    return $pdf->download('reports.pdf');
+}
 
 }

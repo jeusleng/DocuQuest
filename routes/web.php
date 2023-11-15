@@ -82,3 +82,7 @@ Route::get('/admin/display-alumni', [AdminController::class, 'displayAlumni'])->
 Route::get('/admin/view-user{userId}', [AdminController::class, 'viewUser'])->name('admin.view-user');
 
 Route::post('/admin/update-status/{userId}', [AdminController::class, 'updateStatus'])->name('admin.update-status');
+
+Route::get('/admin/reports', [AdminController::class, 'generateReports'])->name('admin.reports');
+
+Route::get('/get-existing-appointments', [AdminController::class, 'getExistingAppointments'])->name('getExistingAppointments');

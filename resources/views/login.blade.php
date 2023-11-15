@@ -53,39 +53,46 @@
 </div>
 
 @if(session('invalid-login'))
-<script>
-Swal.fire({
-    icon: 'error',
-    title: 'Error!',
-    text: 'Invalid email or password.',
-    showConfirmButton: false,
-    timer: 2500,
-    })
-</script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Invalid email or password.',
+            showConfirmButton: false,
+            timer: 2500,
+        });
+    </script>
 @elseif(session('register-success'))
-<script>
-Swal.fire({
-    icon: 'success',
-    title: 'Success!',
-    text: 'Registration Successful.',
-    showConfirmButton: false,
-    timer: 2500,
-    })
-</script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Registration Successful.',
+            showConfirmButton: false,
+            timer: 2500,
+        });
+    </script>
 @endif
+
+@if(session('act-status-inactive'))
+    <script>
+        alert('Your account is inactive. Please contact the administrator.');
+    </script>
+@endif
+
 
 <script>
     const passwordField = document.getElementById("pass-in");
     const visibilityButton = document.getElementById("visibilitiy-btn");
 
     visibilityButton.addEventListener("click", function() {
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-        visibilityButton.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
-    } else {
-        passwordField.type = "password";
-        visibilityButton.innerHTML = '<i class="fa-solid fa-eye"></i>';
-    }
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            visibilityButton.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+        } else {
+            passwordField.type = "password";
+            visibilityButton.innerHTML = '<i class="fa-solid fa-eye"></i>';
+        }
     });
 </script>
 @endsection

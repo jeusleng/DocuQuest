@@ -208,7 +208,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    
                     <!-- Page Heading -->
                     <h1 class="h3 mb-0 text-gray-800 text-center"
                         style="color: #c53f3f !important; font-weight: bold;">Request Details</h1><br>
@@ -216,13 +216,37 @@
                     <div class="row">
 
                         <div class="col-lg-15">
-
+                            
                             <form method="post"
                                 action="{{ route('admin.update-pending', $documentRequest->document_request_id) }}">
                                 <div class="row justify-content-center">
                                     @csrf
                                     <div class="col-md-11">
                                         <div class="card history-card">
+                                            @if ($errors->any())
+    <div class="alert alert-danger">
+        <br>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<!-- Add this code to display success or error messages -->
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
                                             <div class="card-body overflow-auto">
                                                 <!-- Student Information -->
 

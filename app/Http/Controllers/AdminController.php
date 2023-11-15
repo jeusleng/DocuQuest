@@ -89,75 +89,83 @@ class AdminController extends Controller
         return view('admin.pending', compact('pendingRequests'));
     }
 
-    public function checkAppointmentAvailability($date, $time)
+    // Add this function in your controller
+private function getAppointmentsCountOnDay($date)
 {
-    $appointmentExists = DocumentRequests::where('appointment_date_time', $date . ' ' . $time)->where('request_status', 'Pending')->exists();
-    return !$appointmentExists; // Return true if appointment is available, false if not
+    return DocumentRequests::whereDate('appointment_date_time', $date)
+        ->where('request_status', 'Approved')
+        ->count();
 }
+
+// Add this function in your controller
+private function isTimeSlotTaken($date, $time)
+{
+    return DocumentRequests::whereDate('appointment_date_time', $date)
+        ->where('request_status', 'Approved')
+        ->whereRaw('TIME(appointment_date_time) = ?', [$time])
+        ->exists();
+}
+
 
 
     public function editPending($id)
-{
-    $documentRequest = DocumentRequests::findOrFail($id);
-    $student = Users::findOrFail($documentRequest->user_id);
-
-    return view('admin.edit-pending', compact('documentRequest', 'student'));
-}
-
-
+    {
+        // Fetch the necessary data for the view
+        $documentRequest = DocumentRequests::findOrFail($id);
+        $student = Users::findOrFail($documentRequest->user_id); // Assuming user_id is the foreign key for students
+        
+        return view('admin.edit-pending', compact('documentRequest', 'student'));
+    }
 
     public function updatePending(Request $request, $id)
-    {
-        // Validate the form data
-        $request->validate([
-            'request_status' => 'required|in:Pending,Approved,Declined',
-            'appointment_date_time' => 'nullable|date_format:Y-m-d\TH:i',
-            'reason_declined' => 'nullable',
-        ]);
-        
-        // Check if the selected date and time are available
-        if ($request->input('appointment_date_time')) {
-            $existingAppointments = DocumentRequests::where('user_id', $request->user_id)
-                ->where('document_request_id', '<>', $id)
-                ->pluck('appointment_date_time')
-                ->toArray();
-        
-            if (in_array($request->input('appointment_date_time'), $existingAppointments)) {
-                return redirect()->back()->with('error', 'The selected date and time are not available.');
-            }
-        }
-        
-        $existingAppointments = DocumentRequests::where('user_id', $request->user_id)
-    ->where('document_request_id', '<>', $id)
-    ->pluck('appointment_date_time')
-    ->toArray();
+{
+    // Validate the form data
+    $request->validate([
+        'request_status' => 'required|in:Pending,Approved,Declined',
+        'appointment_date_time' => 'nullable|date_format:Y-m-d\TH:i',
+        'reason_declined' => 'nullable',
+    ]);
 
-// Check if the selected date and time are available
-if (in_array($request->input('appointment_date_time'), $existingAppointments)) {
-    return redirect()->back()->with('error', 'The selected date and time are not available.');
+    // Find the DocumentRequest by ID
+    $documentRequest = DocumentRequests::findOrFail($id);
+
+    // Convert the input datetime to a Carbon instance for proper handling
+    $appointmentDateTime = $request->input('appointment_date_time')
+        ? Carbon::parse($request->input('appointment_date_time'))
+        : null;
+
+    // Check if the appointment date and time are provided
+    if ($appointmentDateTime) {
+        $date = $appointmentDateTime->toDateString();
+        $time = $appointmentDateTime->format('H:i');
+
+        // Check if the selected date has reached the maximum appointments
+        $appointmentsCount = $this->getAppointmentsCountOnDay($date);
+
+        // Adjust the limit as needed
+        $maxAppointments = 15;
+
+        if ($appointmentsCount >= $maxAppointments) {
+            return redirect()->back()->with('error', 'Maximum appointments reached for the selected day. Please choose another date.');
+        }
+
+        // Check if the selected time slot is already taken
+        if ($this->isTimeSlotTaken($date, $time)) {
+            return redirect()->back()->with('error', 'The selected time slot is already taken. Please choose another time.');
+        }
+    }
+
+    // Update the fields
+    $documentRequest->update([
+        'request_status' => $request->input('request_status'),
+        'appointment_date_time' => $appointmentDateTime,
+        'reason_declined' => $request->input('reason_declined'),
+    ]);
+
+    // Redirect back with a success message
+    return redirect()->back()->with('success', 'Document request updated successfully!');
 }
 
-
-        
-
-        // Find the DocumentRequest by ID
-        $documentRequest = DocumentRequests::findOrFail($id);
-
-        // Convert the input datetime to a Carbon instance for proper handling
-        $appointmentDateTime = $request->input('appointment_date_time')
-            ? Carbon::parse($request->input('appointment_date_time'))
-            : null;
-
-        // Update the fields
-        $documentRequest->update([
-            'request_status' => $request->input('request_status'),
-            'appointment_date_time' => $appointmentDateTime,
-            'reason_declined' => $request->input('reason_declined'),
-        ]);
-
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Document request updated successfully!');
-    }
 
     public function showApproved()
     {

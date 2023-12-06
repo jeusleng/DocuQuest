@@ -238,10 +238,12 @@
                     <!-- End of Main Content -->
 
                     <!-- Footer -->
-                    <footer class="sticky-footer bg-white">
-                        <div class="container my-auto">
-                            <div class="copyright text-center my-auto">
-                                <span>Copyright &copy; Your Website 2020</span>
+                    <footer class="footer">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="text-muted">NexusTech Solutions &copy; {{ date('Y') }}</p>
+                                </div>
                             </div>
                         </div>
                     </footer>

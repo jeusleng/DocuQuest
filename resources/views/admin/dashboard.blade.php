@@ -313,10 +313,17 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-muted">NexusTech Solutions &copy; {{ date('Y') }}</p>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        </div>
                     </div>
                 </div>
             </footer>

@@ -29,7 +29,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <p class="text-muted">NexusTech Solutions &copy; San Felipe High School {{ date('Y') }}</p>
+                <p class="text-muted">NexusTech Solutions &copy; {{ date('Y') }}</p>
             </div>
             <div class="col-md-6 text-right">
                 <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>

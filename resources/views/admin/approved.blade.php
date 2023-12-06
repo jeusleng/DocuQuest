@@ -171,7 +171,7 @@
                             <div class="container signup-container">
                                 <div class="row justify-content-center">
                                     <div class="col-md-11">
-                                        <div class="card history-card">
+                                        <div class="card approved-card">
                                             <div class="card-body">
                                                 <table class="table table-bordered text-center"
                                                     id="approved-requests-table">
